@@ -23,5 +23,7 @@ const closeable = true
     <br/>
     <tabCartoTablo></tabCartoTablo>
     <br/>
+    
+    <br/>
   </div>
 </template>

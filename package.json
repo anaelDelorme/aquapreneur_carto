@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "nuxt3-leaflet": "^1.0.12"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.6"
+  }
+}
