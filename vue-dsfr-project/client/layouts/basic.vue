@@ -5,6 +5,10 @@ const logoText = ['SGMer','Ministère', 'de l\'agriculture', 'et de la souverain
 const navItems = [
   {
     "to": "/",
+    "text": "Déclaration de production"
+  },
+  {
+    "to": "/cartographie",
     "text": "Cartographie"
   },
   {
@@ -13,6 +17,10 @@ const navItems = [
       {
         "text": "A propos",
         "to": "/apropos"
+      },
+      {
+        "text": "Test carto",
+        "to": "/test"
       }
     ]
   }

@@ -1,61 +1,60 @@
 <script setup>
-const url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-const attribution = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-const zoom= ref(6)
-const center = [47.313220, -1.319482]
-const datageo = ref(undefined)
-onMounted(async () => {
- const response = await fetch(
-    "data/merged.geojson"
-  );
-  datageo.value = await response.json();
-});
+  const url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+  const attribution = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  const zoom= ref(6)
+  const center = [47.313220, -1.319482]
+  const datageo = ref(undefined)
+  onMounted(async () => {
+    const response = await fetch(
+        "data/data_ddtm_atena.geojson"
+      );
+      datageo.value = await response.json();
+  });
+  // add a load status computedRef
+  const dataHasBeenLoaded = computed(() => datageo.value !== undefined)
+
+  const geoStyler = (feature) => {
+    const etat = feature.properties["Etat"]
+    let color;
+        switch (etat) {
+          case "Concédée":
+            color = "#00a95f";
+            break;
+          case "Supprimée":
+            color = "#4b3525";
+            break;
+          case "Annulée":
+            color = "#ecd7a2";
+            break;
+          case "Vacante":
+            color = "#f60700";
+            break;
+          default:
+            color = "#ffca00";
+        };
+      return {
+        color: color,
+        fillColor: color,
+        stroke: true
+      }
+    }
 
 
-const geoStyler = (feature) => {
-  const etat = feature.properties["Etat de la"]
-
-  // Logique pour définir le style en fonction de la valeur de "Etat de la"
-  if (etat === "V") {
-    return {
-      color: "#F23030",
-      fillColor: "#F23030",
-      stroke: true
-    }
-  } else if (etat === "C") {
-    // Style pour "C"
-    return {
-      color: "#267365",
-      fillColor: "#267365",
-      stroke: true
-    }
-  } else if (etat === "S") {
-    // Style pour "S"
-    return {
-      color: "#F29F05",
-      fillColor: "#F29F05",
-      stroke: true
-    }
-  } else {
-    // Style par défaut
-    return {
-      color: "gray",
-      fillColor: "gray",
-      stroke: true
-    }
-  }
-}
 
 </script>
 
 <style>
-body {
-  margin: 0;
-}
+  body {
+    margin: 0;
+  }
 </style>
 
 <template>
-  <div style="height:100vh; width:100vh">
+  <ClientOnly>
+  <div 
+    v-if="dataHasBeenLoaded"
+    style="height:100vh; width:100vh">
+  
     <LMap
       ref="map"
       :zoom="zoom"
@@ -73,4 +72,5 @@ body {
       </LGeoJson>
     </LMap>
   </div>
+</ClientOnly>
 </template>
