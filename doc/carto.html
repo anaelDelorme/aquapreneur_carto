@@ -1,0 +1,296 @@
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Display a map</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 200px; bottom: 0; width: 100%; }
+    #header { position: absolute; top: 0; left: 10px; font-size: 24px; font-weight: bold; }
+    #buttons { position: absolute; top: 20px; left: 10px; }
+   
+    .popupConcession .mapboxgl-popup-content{
+        background-color: white;
+        color: black;
+        opacity: 0.8
+    }
+</style>
+</head>
+
+<body>
+   
+    <div id='header'>Carte des concessions</div>
+    <div id='buttons'>
+          <h3> Filtrer selon l'état des concessions</h3>
+
+ <label>
+    <input type='checkbox' id='supprimeeCheckbox' checked />
+    Supprimée
+  </label>
+   <label>
+    <input type='checkbox' id='annuleeCheckbox' checked />
+    Annulée
+  </label>
+  <label>
+    <input type='checkbox' id='vacanteCheckbox' checked />
+    Vacante
+  </label>
+  <label>
+    <input type='checkbox' id='concedeeCheckbox' checked />
+    Concédée
+  </label>
+  <label>
+      <input type='checkbox' id='indefinieCheckbox' checked />
+    Indéfinie
+  </label>
+  <br/>
+  <h3> Zoom sur une région conchylicole</h3>
+    <button id='Normandie'>Normandie-Mer du Nord</button>
+    <button id='Bnord'>Bretagne Nord</button>
+    <button id='Bsud'>Bretagne Sud</button>
+    <button id='Pdl'>Pays de la Loire</button>
+    <button id='Charente'>Charente-Maritime</button>
+    <button id='Arcachon'>Arcachon-Aquitaine</button>
+    <button id='Med'>Méditerranée</button>
+    </div>
+ <div id='map'></div>
+<script>
+
+// AccesToken
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW5hZWxkZWxvcm1lIiwiYSI6ImNscTI1eHI1bjAwcHQyam5zNXEzbG9sNDUifQ.OplU3wX4w6Thg2ZKomWZ9A';
+
+// Configuration de la carte
+var map = new mapboxgl.Map({container: 'map',
+style: 'mapbox://styles/mapbox/satellite-v9', // fond de carte
+center: [2.727990, 46.967532], // lat/long
+zoom: 5
+});
+
+map.on('load', function(){
+
+    map.addSource('tileset_data',{
+        "type":'vector',
+        "url":'mapbox://anaeldelorme.ci5uapc9'
+    });
+
+    map.addLayer({
+        "source": 'tileset_data',
+        "id": 'concessions',
+        "type": 'fill',
+        "source-layer": 'data_dttm_atena_light-bgx993',
+        "paint":{"fill-color": [
+            "match",
+            ["get", "ETAT"],
+            "Concédée", "#fc5d00",
+            "Supprimée", "#f60700",
+            "Annulée", "#dbdbdc",
+            "Vacante","#27a658",
+            "Etat inconnu","#7b7b7b",
+            "#7b7b7b" /* Default color if no match is found */
+        ],
+        
+        
+        "fill-opacity":0.8}
+    });
+
+    // affichage des clusters de points
+map.addSource('point_data', {
+        "type": 'geojson',
+         "data": 'data_dttm_atena_point_light.geojson',
+        "cluster": true,
+        "clusterMaxZoom": 20, // Max zoom to cluster points on
+        "clusterRadius": 50 // Radius of each cluster when clustering points (defaults to 50)
+      });
+
+ map.addLayer({
+        "id": 'cluster-layer',
+        "type": 'circle',
+        "source": 'point_data',
+        "filter": ['has', 'point_count'],
+        "paint": {
+            'circle-color': [
+                'step',
+                ['get', 'point_count'],
+                '#51bbd6', 100,
+                '#f1f075', 750,
+                '#f28cb1'
+            ],
+            'circle-radius': [
+                'step',
+                ['get', 'point_count'],
+                20,  100,
+                30,  750,
+                40
+            ]
+            }   
+      });
+
+      map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'point_data',
+        filter: ['has', 'point_count'],
+        layout: {
+        'text-field': ['get', 'point_count_abbreviated'],
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 12
+        }
+        });
+
+        map.addLayer({
+            id: 'unclustered-point',
+            type: 'circle',
+            source: 'point_data',
+            filter: ['!', ['has', 'point_count']],
+            paint: {
+            'circle-color': '#11b4da',
+            'circle-radius': 4,
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#fff'
+            }
+            }); 
+
+});
+
+
+
+// Ajout d'éléments de navigation
+var nav = new mapboxgl.NavigationControl();
+map.addControl(nav,'top-left');
+
+map.addControl(new mapboxgl.ScaleControl({
+    maxWidth:120,
+    unit:'metric'
+}));
+
+
+// Intéractivité avec les données 
+var popup = new mapboxgl.Popup({
+    closeButton: true,
+    closeOnClick: true,
+    className: 'popupConcession'
+});
+
+map.on('mousemove', function(e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['concessions'] });
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+});
+map.on('click', function(e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['concessions'] });
+    if (!features.length) {
+        popup.remove();
+        return;
+    }
+
+    var feature = features[0];
+    var coordinates = feature.geometry.type === 'Point' ?
+        feature.geometry.coordinates :
+        e.lngLat;
+
+    popup.setLngLat(coordinates)
+        .setHTML('<h2> Concession n°'+feature.properties.NUM_CONCESSION+'</h2>'+
+               '<h3> Arrêté n°'+feature.properties.NUM_ARRETE+' du '+feature.properties.DATE_ARRETE+'</h3>'+
+               '<p>Etat : '+feature.properties.ETAT+'<br/>'+
+                '<p>Date d\'expiration : '+feature.properties.DATE_EXPIRATION+'<br/>'+
+               '<p>Type de parcelle : '+feature.properties.TYPE_PARCELLE+'<br/>'+ <!-- Fix here -->
+               '<p>Nature du terrain : '+feature.properties.NATURE_TERRAIN+'<br/>'+
+               '<p>Nature et famille d\'exploitation : '+feature.properties.NATURE_EXPLOITATION+' -'+feature.properties.FAMILLE_EXPLOITATION+'<br/>'+
+               '<p>Espèce : '+feature.properties.ESPECE+'<br/>'+
+               
+               '</p>')
+        .addTo(map);
+
+});
+
+// filtrer les concessions
+function updateFilters() {
+    var filters = ['any'];
+
+    if (document.getElementById('supprimeeCheckbox').checked) {
+      filters.push(['==', ['get', 'ETAT'], 'Supprimée']);
+    }
+    if (document.getElementById('annuleeCheckbox').checked) {
+      filters.push(['==', ['get', 'ETAT'], 'Annulée']);
+    }
+    if (document.getElementById('vacanteCheckbox').checked) {
+      filters.push(['==', ['get', 'ETAT'], 'Vacante']);
+    }
+    if (document.getElementById('concedeeCheckbox').checked) {
+      filters.push(['==', ['get', 'ETAT'], 'Concédée']);
+    }
+    if (document.getElementById('indefinieCheckbox').checked) {
+      filters.push(['==', ['get', 'ETAT'], 'Etat inconnu']);
+    }
+
+    map.setFilter('concessions', filters);
+  }
+
+  // Ajoutez un écouteur d'événement pour chaque case à cocher
+  document.getElementById('supprimeeCheckbox').addEventListener('change', updateFilters);
+    document.getElementById('annuleeCheckbox').addEventListener('change', updateFilters);
+  document.getElementById('vacanteCheckbox').addEventListener('change', updateFilters);
+  document.getElementById('concedeeCheckbox').addEventListener('change', updateFilters);
+  document.getElementById('indefinieCheckbox').addEventListener('change', updateFilters);
+
+
+//zoom sur les régions conchylicole
+
+document.getElementById('Normandie').addEventListener('click', function() {
+    map.flyTo({
+        zoom: 8.5,
+        center:[-0.7236, 49.2473]
+    });
+});
+
+document.getElementById('Bnord').addEventListener('click', function() {
+    map.flyTo({
+        zoom: 8.2,
+        center:[-3.026, 48.802]
+    });
+});
+
+document.getElementById('Bsud').addEventListener('click', function() {
+    map.flyTo({
+        zoom: 8.5,
+        center:[-3.5046, 47.7016]
+    });
+});
+
+document.getElementById('Pdl').addEventListener('click', function() {
+    map.flyTo({
+        zoom: 8.17,
+        center:[-2.472, 46.975]
+    });
+});
+
+document.getElementById('Charente').addEventListener('click', function() {
+    map.flyTo({
+        zoom: 9.35,
+        center:[-1.2543, 46.0857]
+    });
+});
+
+document.getElementById('Arcachon').addEventListener('click', function() {
+    map.flyTo({
+        zoom: 9.62,
+        center:[-1.1884, 44.5649]
+    });
+});
+
+document.getElementById('Med').addEventListener('click', function() {
+    map.flyTo({
+        zoom: 7.25,
+        center:[5.841, 43.139]
+    });
+});
+
+// Gestion des erreurs
+map.on('error', function(err) { 
+    console.log('Mapbox Error:', err.error);
+});
+</script>
+
+</body>
+</html>
