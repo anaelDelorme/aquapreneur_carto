@@ -166,6 +166,23 @@ map.addControl(new mapboxgl.ScaleControl({
 }));
 
 
+ map.on('zoom', function () {
+      var currentZoom = map.getZoom();
+
+      // Affichez le layer 'concessions' si le zoom est supérieur à 8, sinon affichez le layer 'point_data'
+      if (currentZoom > 8) {
+        map.setLayoutProperty('concessions', 'visibility', 'visible');
+        map.setLayoutProperty('cluster-layer', 'visibility', 'none');
+        map.setLayoutProperty('cluster-count', 'visibility', 'none');
+        map.setLayoutProperty('unclustered-point', 'visibility', 'none');
+      } else {
+        map.setLayoutProperty('concessions', 'visibility', 'none');
+        map.setLayoutProperty('cluster-layer', 'visibility', 'visible');
+        map.setLayoutProperty('cluster-count', 'visibility', 'visible');
+        map.setLayoutProperty('unclustered-point', 'visibility', 'visible');
+      }
+    });
+    
 // Intéractivité avec les données 
 var popup = new mapboxgl.Popup({
     closeButton: true,
@@ -204,6 +221,9 @@ map.on('click', function(e) {
 
 });
 
+
+
+    
 // filtrer les concessions
 function updateFilters() {
     var filters = ['any'];
