@@ -17,6 +17,8 @@ const tabTitles = [
 
 const initialSelectedIndex = 0
 const { ascendant, selected, select } = useTabs()
+
+
 </script>
 
 <template>
@@ -33,7 +35,7 @@ const { ascendant, selected, select } = useTabs()
       :selected="selected === 0"
       :asc="ascendant"
     >
-    <cartoLeaflet></cartoLeaflet>
+    <cartoMapbox></cartoMapbox>
     </DsfrTabContent>
     <DsfrTabContent
       panel-id="tab-content-1"

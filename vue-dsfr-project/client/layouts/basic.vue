@@ -1,7 +1,7 @@
 <script setup>
 const serviceTitle = 'Aquapreneur.e.s'
 const serviceDescription = 'Cartographie des concessions sur domaine public maritime'
-const logoText = ['SGMer','Ministère', 'de l\'agriculture', 'et de la souveraineté', 'alimentaire']
+const logoText = ['Gouvernement']
 const navItems = [
   {
     "to": "/",
@@ -9,7 +9,7 @@ const navItems = [
   },
   {
     "to": "/cartographie",
-    "text": "Cartographie"
+    "text": "Cartographie des concessions"
   },
   {
     "title": "Informations complémentaires",
@@ -21,6 +21,10 @@ const navItems = [
       {
         "text": "Test carto",
         "to": "/test"
+      },
+      {
+        "text": "Test carto 2",
+        "to": "/cartoLeafletMbtiles"
       }
     ]
   }
@@ -30,11 +34,9 @@ const navItems = [
 
 <template>
   <DsfrHeader
-    v-model="query"
     :service-title="serviceTitle"
     :service-description="serviceDescription"
     :logo-text="logoText"
-    :quick-links="quickLinks"
   />
   <div class="fr-container">
     <template>

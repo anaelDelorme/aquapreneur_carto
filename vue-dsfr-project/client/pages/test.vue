@@ -30,14 +30,22 @@ export default {
       attribution:
       'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
       geojson: null,
-      mode: "municipality",
+      fillColor: "#e4ce7f"
     };
   },
   computed: {
     geojsonOptions() {
       return {
         onEachFeature: (feature, layer) => {
+          const color = this.getColor(layer)
           layer.bindPopup((l) => this.getLabel(l));
+          layer.setStyle({
+            weight: 2,
+            color: color,
+            opacity: 1,
+            fillColor: color,
+            fillOpacity: 1
+          });
         },
       };
     },
@@ -50,7 +58,6 @@ export default {
           throw new Error("Impossible de charger le fichier GeoJSON");
         }
         this.geojson = await response.json();
-        this.updateStyle();
       } catch (erreur) {
         console.error("Erreur lors du chargement du fichier GeoJSON", erreur);
         throw erreur;
@@ -59,6 +66,30 @@ export default {
     getLabel(layer) {
       const props = layer?.feature?.properties;
       return `Numéro de la concession: ${props?.NUM_CONCESSION},<br> Etat (Atena): ${props?.Etat}`;
+    },
+    getColor(layer) {
+      const props = layer?.feature?.properties;
+      let color;
+        switch (props?.Etat) {
+          case "Concédée":
+            color = "#00a95f";
+            break;
+          case "Supprimée":
+            color = "#4b3525";
+            break;
+          case "Annulée":
+            color = "#ecd7a2";
+            break;
+          case "Vacante":
+            color = "#f60700";
+            break;
+          case null:
+            color = "#ffca00";
+            break;
+          default:
+            color = "#ffca00";
+        };
+      return color;
     },
     handleFeatureClick(event) {
       const layer = event.target;
@@ -69,6 +100,7 @@ export default {
         layer.openPopup();
       }
     },
+    
   },
   mounted() {
     this.loadData();

@@ -16,5 +16,8 @@ export default defineNuxtConfig({
     '**/*.cy.*',
   ],
   srcDir: 'client/',
-  modules: ['nuxt-icon','nuxt3-leaflet']
+  modules: ['nuxt-icon','nuxt3-leaflet', 'nuxt-mapbox'],
+  mapbox: {
+    accessToken: 'pk.eyJ1IjoiYW5hZWxkZWxvcm1lIiwiYSI6ImNscTI1eHI1bjAwcHQyam5zNXEzbG9sNDUifQ.OplU3wX4w6Thg2ZKomWZ9A'
+  }
 })

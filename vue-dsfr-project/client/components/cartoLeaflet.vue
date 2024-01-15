@@ -68,7 +68,8 @@
       />
       <LGeoJson 
         :geojson="datageo"
-        :options-style="geoStyler">
+        :options-style="geoStyler"
+        @pm:click="handleFeatureClick">
       </LGeoJson>
     </LMap>
   </div>
