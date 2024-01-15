@@ -160,15 +160,27 @@ map.on('click', function(e) {
             feature.geometry.coordinates :
             e.lngLat;
 
+        var dateExpiration = new Date(feature.properties.DATE_EXPIRATION);
+        var jourExpiration = dateExpiration.getDate();
+        var moisExpiration = dateExpiration.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
+        var anneeExpiration = dateExpiration.getFullYear();
+        var dateFormateeExpiration = jourExpiration + '/' + moisExpiration + '/' + anneeExpiration;
+
+        var dateArrete = new Date(feature.properties.['DATE_ARRETE ']);
+        var jourArrete = dateArrete.getDate();
+        var moisArrete = dateArrete.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
+        var anneeArrete = dateArrete.getFullYear();
+        var dateFormateeArrete = jourArrete + '/' + moisArrete+ '/' + anneeArrete;
+
         popup.setLngLat(coordinates)
             .setHTML('<h2> Concession n°' + feature.properties.NUM_CONCESSION + '</h2>' +
-                '<h3> Arrêté n°' + feature.properties.NUM_ARRETE + ' du ' + feature.properties.DATE_ARRETE + '</h3>' +
+                '<h3> Arrêté n°' + feature.properties.NUM_ARRETE + ' du ' + dateFormateeArrete + '</h3>' +
                 '<p>Etat : ' + feature.properties.ETAT + '<br/>' +
-                '<p>Date d\'expiration : ' + feature.properties.DATE_EXPIRATION + '<br/>' +
-                '<p>Type de parcelle : ' + feature.properties.TYPE_PARCELLE + '<br/>' +
+                '<p>Date d\'expiration : ' + dateFormateeExpiration + '<br/>' +
+                '<p>Type de parcelle : ' + feature.properties['TYPE PARCELLE'] + '<br/>' +
                 '<p>Nature du terrain : ' + feature.properties.NATURE_TERRAIN + '<br/>' +
                 '<p>Nature et famille d\'exploitation : ' + feature.properties.NATURE_EXPLOITATION + ' -' + feature.properties.FAMILLE_EXPLOITATION + '<br/>' +
-                '<p>Espèce : ' + feature.properties.ESPECE + '<br/>' +
+                '<p>Espèce : ' + feature.properties.ESPECE_PRINCIPALE + '<br/>' +
                 '</p>')
             .addTo(map);
 
