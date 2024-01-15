@@ -11,14 +11,14 @@ zoom: 5
 function addAdditionalSourceAndLayer() {
     map.addSource('tileset_data',{
         "type":'vector',
-        "url":'mapbox://anaeldelorme.ci5uapc9'
+        "url":'mapbox://anaeldelorme.7irw0cc8'
     });
 
     map.addLayer({
         "source": 'tileset_data',
         "id": 'concessions',
         "type": 'fill',
-        "source-layer": 'data_dttm_atena_light-bgx993',
+        "source-layer": 'data_dttm_atena_light-58sx1e',
         "paint":{"fill-color": [
             "match",
             ["get", "ETAT"],
