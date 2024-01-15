@@ -166,7 +166,7 @@ map.on('click', function(e) {
         var anneeExpiration = dateExpiration.getFullYear();
         var dateFormateeExpiration = jourExpiration + '/' + moisExpiration + '/' + anneeExpiration;
 
-        var dateArrete = new Date(feature.properties.['DATE_ARRETE ']);
+        var dateArrete = new Date(feature.properties['DATE_ARRETE ']);
         var jourArrete = dateArrete.getDate();
         var moisArrete = dateArrete.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
         var anneeArrete = dateArrete.getFullYear();
