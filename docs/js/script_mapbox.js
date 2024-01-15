@@ -1,8 +1,6 @@
 // AccesToken
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5hZWxkZWxvcm1lIiwiYSI6ImNscTI1eHI1bjAwcHQyam5zNXEzbG9sNDUifQ.OplU3wX4w6Thg2ZKomWZ9A';
 
-var defaultStyle = 'mapbox://styles/mapbox/satellite-v9';
-
 // Configuration de la carte
 var map = new mapboxgl.Map({container: 'map',
 style: 'mapbox://styles/mapbox/satellite-v9', // fond de carte

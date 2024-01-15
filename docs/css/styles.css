@@ -11004,7 +11004,7 @@ footer.footer .social-link:hover {
 
 @media (max-width: 992px) {
   .map {
-    height: 75%;
+    height: 100%;
   }
 }
 .masthead {
