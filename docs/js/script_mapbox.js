@@ -235,8 +235,12 @@ function updateFilters() {
     map.setFilter('concessions', filters);
 
     // pour les clusters
-    // Filter GeoJSON data using Turf.js
-    var filteredData = turf.filter(originalData, 'ETAT', filters);
+    var filteredData = originalData.features.filter(item => {
+        if(mylist.filter(myitem => myitem.id === item.properties.wineryid).length > 0) {
+            return item;
+        }
+    });
+
 
     // Update the clustering source with the filtered data
     map.getSource('point_data').setData(filteredData);
