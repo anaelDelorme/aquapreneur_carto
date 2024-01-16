@@ -1,27 +1,3 @@
-var mygeojson={crs: {properties: {name: "EPSG:4326"}, type: "name"},
-features: [
-	{geometry: {coordinates: [25, 37], type: "Point"},properties: {"wineryid":3},type:"Feature"},
-  {geometry: {coordinates: [26, 37], type: "Point"},properties: {"wineryid":45},type:"Feature"},
-  {geometry: {coordinates: [25, 38], type: "Point"},properties: {"wineryid":34},type:"Feature"},
-  {geometry: {coordinates: [28, 37], type: "Point"},properties: {"wineryid":42},type:"Feature"},
-  {geometry: {coordinates: [25, 342], type: "Point"},properties: {"wineryid":80},type:"Feature"},
-  {geometry: {coordinates: [25.24, 37.12], type: "Point"},properties: {"wineryid":120},type:"Feature"}], type:"FeatureCollection"};
-mylist=[{id:1, name:"test1"},{id:34,name:"test2"}];
-var tempgeojson = mygeojson.features.filter(function (item) {
-  return (mylist.every(f => item.properties.id === f.id) )
-});
-var filteredgeojson={};
-filteredgeojson.features = mygeojson.features.filter(item => { 
-     if(mylist.filter(myitem => myitem.id === item.properties.wineryid).length > 0) { 
-          return item;
-      }
-});
-filteredgeojson.crs=mygeojson.crs;
-filteredgeojson.type="FeatureCollection";
-console.log("initial",JSON.stringify(mygeojson));
-console.log('filtered',JSON.stringify(filteredgeojson));
-
-
 // AccesToken
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5hZWxkZWxvcm1lIiwiYSI6ImNscTI1eHI1bjAwcHQyam5zNXEzbG9sNDUifQ.OplU3wX4w6Thg2ZKomWZ9A';
 
@@ -271,6 +247,32 @@ function updateFilters() {
     }
     console.log('etatsFiltresCluster:', etatsFiltresCluster);
     map.setFilter('concessions', filters);
+
+    var mygeojson={crs: {properties: {name: "EPSG:4326"}, type: "name"},
+    features: [
+        {geometry: {coordinates: [25, 37], type: "Point"},properties: {"wineryid":3},type:"Feature"},
+      {geometry: {coordinates: [26, 37], type: "Point"},properties: {"wineryid":45},type:"Feature"},
+      {geometry: {coordinates: [25, 38], type: "Point"},properties: {"wineryid":34},type:"Feature"},
+      {geometry: {coordinates: [28, 37], type: "Point"},properties: {"wineryid":42},type:"Feature"},
+      {geometry: {coordinates: [25, 342], type: "Point"},properties: {"wineryid":80},type:"Feature"},
+      {geometry: {coordinates: [25.24, 37.12], type: "Point"},properties: {"wineryid":120},type:"Feature"}], type:"FeatureCollection"};
+    mylist=[{id:1, name:"test1"},{id:34,name:"test2"}];
+    var tempgeojson = mygeojson.features.filter(function (item) {
+      return (mylist.every(f => item.properties.id === f.id) )
+    });
+    var filteredgeojson={};
+    filteredgeojson.features = mygeojson.features.filter(item => { 
+         if(mylist.filter(myitem => myitem.id === item.properties.wineryid).length > 0) { 
+              return item;
+          }
+    });
+    filteredgeojson.crs=mygeojson.crs;
+    filteredgeojson.type="FeatureCollection";
+    console.log("initial",JSON.stringify(mygeojson));
+    console.log('filtered',JSON.stringify(filteredgeojson));
+
+    console.log('orginial',JSON.stringify(originalData));
+
 
     // Filter the GeoJSON data based on the combined filter
     var filteredData = {
