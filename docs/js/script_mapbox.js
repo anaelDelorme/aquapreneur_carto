@@ -247,8 +247,7 @@ function updateFilters() {
     map.setFilter('concessions', filters);
 
     // Filter the GeoJSON data based on the combined filter
-    const filteredData = {...originalData };
-    filteredData.features = originalData.features.filter(feature => etatsFiltresCluster.includes(feature.properties.ETAT));
+    filteredData = geo.filter(originalData, (d) => d.ETAT == "Concédée")
 
     console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
 
