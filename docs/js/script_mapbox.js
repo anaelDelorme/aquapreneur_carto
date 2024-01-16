@@ -74,7 +74,7 @@ map.addSource('point_data', {
         filter: ['has', 'point_count'],
         "maxzoom":10,
         layout: {
-        'text-field': ['get', 'point_count_abbreviated'],
+        'text-field': ['get', 'point_count'],
         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
         'text-size': 12
         }
