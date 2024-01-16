@@ -205,6 +205,7 @@ map.on('click', function(e) {
     }
 
 });
+
 var originalData;
 
 fetch('./data_dttm_atena_point_light.geojson')
@@ -213,8 +214,6 @@ fetch('./data_dttm_atena_point_light.geojson')
     originalData = data;
   })
   .catch(error => console.error('Erreur lors de la récupération des données :', error));
-
-
 
 // filtrer les concessions
 function updateFilters() {
@@ -246,21 +245,7 @@ function updateFilters() {
       filters.push(['==', ['get', 'ETAT'], 'Etat inconnu']);
       etatsFiltresCluster.push('Etat inconnu');
     }
-    console.log('etatsFiltresCluster:', etatsFiltresCluster);
     map.setFilter('concessions', filters);
-    mylist=[{ETAT:"Annulée"},{ETAT:"Vacante"}];
-    var filteredgeojson={};
-    filteredgeojson.features = originalData.features.filter(item => { 
-         if(mylist.filter(myitem => myitem.ETAT === item.properties.ETAT).length > 0) { 
-              return item;
-          }
-    });
-    filteredgeojson.crs=originalData.crs;
-    filteredgeojson.type="FeatureCollection";
-    console.log("initial",JSON.stringify(originalData));
-    console.log('filtered',JSON.stringify(filteredgeojson));
-    console.log('orginial',JSON.stringify(originalData));
-
 
     // Filter the GeoJSON data based on the combined filter
     var filteredData = {
@@ -273,8 +258,6 @@ function updateFilters() {
             return false;
         })
     };
-
-    console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
 
     // Update the clustering source with the filtered data
     map.getSource('point_data').setData(filteredData);
