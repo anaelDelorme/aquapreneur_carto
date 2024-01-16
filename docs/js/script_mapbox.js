@@ -228,11 +228,21 @@ function updateFilters() {
     }
 
     map.setFilter('concessions', filters);
+
+    // pour les clusters
+    // Get the original GeoJSON data
+    var originalData = map.getSource('point_data').getData();
+
+    // Filter GeoJSON data using Turf.js
+    var filteredData = turf.filter(originalData, 'ETAT', filters);
+
+    // Update the clustering source with the filtered data
+    map.getSource('point_data').setData(filteredData);
   }
 
   // Ajoutez un écouteur d'événement pour chaque case à cocher
   document.getElementById('supprimeeCheckbox').addEventListener('change', updateFilters);
-    document.getElementById('annuleeCheckbox').addEventListener('change', updateFilters);
+  document.getElementById('annuleeCheckbox').addEventListener('change', updateFilters);
   document.getElementById('vacanteCheckbox').addEventListener('change', updateFilters);
   document.getElementById('concedeeCheckbox').addEventListener('change', updateFilters);
   document.getElementById('indefinieCheckbox').addEventListener('change', updateFilters);
