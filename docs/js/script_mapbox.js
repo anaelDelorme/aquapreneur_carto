@@ -213,6 +213,9 @@ map.on('data', function(e) {
     console.log('originalData:', originalData); // Ajout de cette ligne pour afficher dans la console
   }
 });
+
+geo = require("geotoolbox@2")
+
 // filtrer les concessions
 function updateFilters() {
     var filters = ['any'];
