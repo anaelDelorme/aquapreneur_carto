@@ -217,6 +217,12 @@ map.on('data', function(e) {
 function updateFilters() {
     var filters = ['any'];
     var etatsFiltresCluster = [];
+
+    if (!originalData) {
+        console.error('Original data is not yet loaded.');
+        return;
+      }
+
     if (document.getElementById('supprimeeCheckbox').checked) {
       filters.push(['==', ['get', 'ETAT'], 'Supprimée']);
       etatsFiltresCluster.push('Supprimée');
@@ -237,7 +243,7 @@ function updateFilters() {
       filters.push(['==', ['get', 'ETAT'], 'Etat inconnu']);
       etatsFiltresCluster.push('Etat inconnu');
     }
-
+    console.log('etatsFiltresCluster:', etatsFiltresCluster);
     map.setFilter('concessions', filters);
         // Filtrer le GeoJSON en fonction de la propriété ETAT
         const filteredData = {
