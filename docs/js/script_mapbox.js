@@ -207,18 +207,14 @@ map.on('click', function(e) {
 });
 var originalData;
 
-map.on('data', function(e) {
-  if (e.sourceId === 'point_data' && e.isSourceLoaded) {
-    originalData = map.getSource('point_data')._data;
-    console.log('originalData:', originalData); // Ajout de cette ligne pour afficher dans la console
-  }
-});
-
-fetch(originalData)
-  .then(response => response.json())  // Convertissez la réponse en JSON
+fetch('./data_dttm_atena_point_light.geojson')
+  .then(response => response.json())
   .then(data => {
-    originalDataJson = data;
+    originalData = data;
   })
+  .catch(error => console.error('Erreur lors de la récupération des données :', error));
+
+
 
 // filtrer les concessions
 function updateFilters() {
@@ -252,76 +248,25 @@ function updateFilters() {
     }
     console.log('etatsFiltresCluster:', etatsFiltresCluster);
     map.setFilter('concessions', filters);
-
-    var mygeojson={
-        "type": "FeatureCollection",
-        "crs": {
-            "type": "name",
-            "properties": {
-                "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
-            }
-        },
-        "features": [
-            {
-                "type": "Feature",
-                "properties": {
-                    "ETAT": "Concédée"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        -1.590033606900605,
-                        48.94872337724067
-                    ]
-                }
-            },
-            {
-                "type": "Feature",
-                "properties": {
-                    "ETAT": "Concédée"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        -1.590033606900605,
-                        48.94872337724067
-                    ]
-                }
-            },
-            {
-                "type": "Feature",
-                "properties": {
-                    "ETAT": "Annulée"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        -1.590033606900605,
-                        48.94872337724067
-                    ]
-                }
-            }]
-        };
-    mylist=[{ETAT:"Concédée"},{ETAT:"Vacante"}];
+    mylist=[{ETAT:"Annulée"},{ETAT:"Vacante"}];
     var filteredgeojson={};
-    filteredgeojson.features = mygeojson.features.filter(item => { 
+    filteredgeojson.features = originalData.features.filter(item => { 
          if(mylist.filter(myitem => myitem.ETAT === item.properties.ETAT).length > 0) { 
               return item;
           }
     });
-    filteredgeojson.crs=mygeojson.crs;
+    filteredgeojson.crs=originalData.crs;
     filteredgeojson.type="FeatureCollection";
-    console.log("initial",JSON.stringify(mygeojson));
+    console.log("initial",JSON.stringify(originalData));
     console.log('filtered',JSON.stringify(filteredgeojson));
-
-    console.log('orginial',JSON.stringify(originalDataJson));
+    console.log('orginial',JSON.stringify(originalData));
 
 
     // Filter the GeoJSON data based on the combined filter
     var filteredData = {
         type: "FeatureCollection",
-        crs: originalDataJson.crs,
-        features: originalDataJson.features.filter(item => {
+        crs: originalData.crs,
+        features: originalData.features.filter(item => {
             if (item.properties && item.properties.ETAT) {
                 return etatsFiltresCluster.includes(item.properties.ETAT);
             }
