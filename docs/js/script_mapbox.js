@@ -18,8 +18,8 @@ filteredgeojson.features = mygeojson.features.filter(item => {
 });
 filteredgeojson.crs=mygeojson.crs;
 filteredgeojson.type="FeatureCollection";
-document.getElementById('initial').innerHTML=JSON.stringify(mygeojson);
-document.getElementById('filtered').innerHTML=JSON.stringify(filteredgeojson);
+console.log("initial",JSON.stringify(mygeojson));
+console.log('filtered',JSON.stringify(filteredgeojson));
 
 
 // AccesToken
