@@ -216,32 +216,35 @@ map.on('data', function(e) {
 // filtrer les concessions
 function updateFilters() {
     var filters = ['any'];
-
+    var etatsFiltresCluster = [];
     if (document.getElementById('supprimeeCheckbox').checked) {
       filters.push(['==', ['get', 'ETAT'], 'Supprimée']);
+      etatsFiltresCluster.push('Supprimée');
     }
     if (document.getElementById('annuleeCheckbox').checked) {
       filters.push(['==', ['get', 'ETAT'], 'Annulée']);
+      etatsFiltresCluster.push('Annulée');
     }
     if (document.getElementById('vacanteCheckbox').checked) {
       filters.push(['==', ['get', 'ETAT'], 'Vacante']);
+      etatsFiltresCluster.push('Vacante');
     }
     if (document.getElementById('concedeeCheckbox').checked) {
       filters.push(['==', ['get', 'ETAT'], 'Concédée']);
+      etatsFiltresCluster.push('Concédée');
     }
     if (document.getElementById('indefinieCheckbox').checked) {
       filters.push(['==', ['get', 'ETAT'], 'Etat inconnu']);
+      etatsFiltresCluster.push('Etat inconnu');
     }
 
     map.setFilter('concessions', filters);
+        // Filtrer le GeoJSON en fonction de la propriété ETAT
+        const filteredData = {
+            "type": "FeatureCollection",
+            "features": originalData.features.filter(feature => etatsFiltresCluster.includes(feature.properties.ETAT))
+        };
 
-        
-    // pour les clusters
-    var filteredData = originalData?.features?.filter(item => {
-        if (mylist.filter(myitem => myitem.id === item.properties.wineryid).length > 0) {
-        return item;
-        }
-    });
     console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
 
     // Update the clustering source with the filtered data
