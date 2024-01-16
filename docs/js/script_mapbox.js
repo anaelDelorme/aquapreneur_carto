@@ -159,7 +159,11 @@ map.on('click', function(e) {
         var coordinates = feature.geometry.type === 'Point' ?
             feature.geometry.coordinates :
             e.lngLat;
-
+        
+            function isValidDate(date) {
+                return date instanceof Date && !isNaN(date);
+            }    
+        
         var dateExpiration = new Date(feature.properties.DATE_EXPIRATION);
         var jourExpiration = dateExpiration.getDate();
         var moisExpiration = dateExpiration.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
