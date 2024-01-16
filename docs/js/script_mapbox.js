@@ -205,7 +205,7 @@ map.on('click', function(e) {
     }
 
 });
-
+var originalData;
 map.on('data', function(e) {
     if (e.sourceId === 'point_data' && e.isSourceLoaded) {
       var originalData = map.getSource('point_data')._data;
