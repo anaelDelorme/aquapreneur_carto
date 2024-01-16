@@ -246,10 +246,11 @@ function updateFilters() {
     console.log('etatsFiltresCluster:', etatsFiltresCluster);
     map.setFilter('concessions', filters);
         // Filtrer le GeoJSON en fonction de la propriété ETAT
-        const filteredData = {
-            "type": "FeatureCollection",
-            "features": originalData.features.filter(feature => etatsFiltresCluster.includes(feature.properties.ETAT))
-        };
+        const filteredData = originalData.features.filter(feature => {
+            const etat = feature.properties.ETAT;
+            return etatsFiltresCluster.includes(etat);
+          });
+          
 
     console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
 
