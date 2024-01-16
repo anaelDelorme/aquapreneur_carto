@@ -205,7 +205,6 @@ map.on('click', function(e) {
     }
 
 });
-
 var originalData;
 
 map.on('data', function(e) {
@@ -215,7 +214,6 @@ map.on('data', function(e) {
   }
 });
 
-import geo from 'geotoolbox@2';
 
 // filtrer les concessions
 function updateFilters() {
@@ -251,8 +249,9 @@ function updateFilters() {
     map.setFilter('concessions', filters);
 
     // Filter the GeoJSON data based on the combined filter
-    filteredData = geo.filter(originalData, (d) => d.ETAT == "Concédée")
-
+    console.log(originalData.filter(function(item){
+        return item.properties.ETAT == "Concédée";         
+    }));
     console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
 
     // Update the clustering source with the filtered data
