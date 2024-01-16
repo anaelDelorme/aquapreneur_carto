@@ -242,6 +242,7 @@ function updateFilters() {
         return item;
         }
     });
+    console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
 
     // Update the clustering source with the filtered data
     map.getSource('point_data').setData(filteredData);
