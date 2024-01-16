@@ -248,21 +248,59 @@ function updateFilters() {
     console.log('etatsFiltresCluster:', etatsFiltresCluster);
     map.setFilter('concessions', filters);
 
-    var mygeojson={crs: {properties: {name: "EPSG:4326"}, type: "name"},
-    features: [
-        {geometry: {coordinates: [25, 37], type: "Point"},properties: {"wineryid":3},type:"Feature"},
-      {geometry: {coordinates: [26, 37], type: "Point"},properties: {"wineryid":45},type:"Feature"},
-      {geometry: {coordinates: [25, 38], type: "Point"},properties: {"wineryid":34},type:"Feature"},
-      {geometry: {coordinates: [28, 37], type: "Point"},properties: {"wineryid":42},type:"Feature"},
-      {geometry: {coordinates: [25, 342], type: "Point"},properties: {"wineryid":80},type:"Feature"},
-      {geometry: {coordinates: [25.24, 37.12], type: "Point"},properties: {"wineryid":120},type:"Feature"}], type:"FeatureCollection"};
-    mylist=[{id:1, name:"test1"},{id:34,name:"test2"}];
-    var tempgeojson = mygeojson.features.filter(function (item) {
-      return (mylist.every(f => item.properties.id === f.id) )
-    });
+    var mygeojson={
+        "type": "FeatureCollection",
+        "crs": {
+            "type": "name",
+            "properties": {
+                "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+            }
+        },
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "ETAT": "Concédée"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.590033606900605,
+                        48.94872337724067
+                    ]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "ETAT": "Concédée"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.590033606900605,
+                        48.94872337724067
+                    ]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "ETAT": "Annulée"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.590033606900605,
+                        48.94872337724067
+                    ]
+                }
+            }]
+        };
+    mylist=[{id:1, ETAT:"Concédée"},{id:34,ETAT:"Vacante"}];
     var filteredgeojson={};
     filteredgeojson.features = mygeojson.features.filter(item => { 
-         if(mylist.filter(myitem => myitem.id === item.properties.wineryid).length > 0) { 
+         if(mylist.filter(myitem => myitem.ETAT === item.properties.ETAT).length > 0) { 
               return item;
           }
     });
