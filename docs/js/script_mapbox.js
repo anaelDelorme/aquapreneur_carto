@@ -206,12 +206,13 @@ map.on('click', function(e) {
 
 });
 var originalData;
+
 map.on('data', function(e) {
-    if (e.sourceId === 'point_data' && e.isSourceLoaded) {
-      var originalData = map.getSource('point_data')._data;
-      return (originalData)
-    }
-  });
+  if (e.sourceId === 'point_data' && e.isSourceLoaded) {
+    originalData = map.getSource('point_data')._data;
+    console.log('originalData:', originalData); // Ajout de cette ligne pour afficher dans la console
+  }
+});
 // filtrer les concessions
 function updateFilters() {
     var filters = ['any'];
@@ -234,13 +235,13 @@ function updateFilters() {
 
     map.setFilter('concessions', filters);
 
+        
     // pour les clusters
-    var filteredData = originalData.features.filter(item => {
-        if(mylist.filter(myitem => myitem.id === item.properties.wineryid).length > 0) {
-            return item;
+    var filteredData = originalData?.features?.filter(item => {
+        if (mylist.filter(myitem => myitem.id === item.properties.wineryid).length > 0) {
+        return item;
         }
     });
-
 
     // Update the clustering source with the filtered data
     map.getSource('point_data').setData(filteredData);
