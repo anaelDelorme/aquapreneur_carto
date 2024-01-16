@@ -249,9 +249,17 @@ function updateFilters() {
     map.setFilter('concessions', filters);
 
     // Filter the GeoJSON data based on the combined filter
-    console.log(originalData.filter(function(item){
-        return item.properties.ETAT == "Concédée";         
-    }));
+    var filteredData = {
+        type: "FeatureCollection",
+        crs: originalData.crs,
+        features: originalData.features.filter(item => {
+            if (item.properties && item.properties.ETAT) {
+                return etatsFiltresCluster.includes(item.properties.ETAT);
+            }
+            return false;
+        })
+    };
+
     console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
 
     // Update the clustering source with the filtered data
