@@ -214,6 +214,11 @@ map.on('data', function(e) {
   }
 });
 
+fetch(originalData)
+  .then(response => response.json())  // Convertissez la réponse en JSON
+  .then(data => {
+    originalDataJson = data;
+  })
 
 // filtrer les concessions
 function updateFilters() {
@@ -297,7 +302,7 @@ function updateFilters() {
                 }
             }]
         };
-    mylist=[{id:1, ETAT:"Concédée"},{id:34,ETAT:"Vacante"}];
+    mylist=[{ETAT:"Concédée"},{ETAT:"Vacante"}];
     var filteredgeojson={};
     filteredgeojson.features = mygeojson.features.filter(item => { 
          if(mylist.filter(myitem => myitem.ETAT === item.properties.ETAT).length > 0) { 
@@ -309,14 +314,14 @@ function updateFilters() {
     console.log("initial",JSON.stringify(mygeojson));
     console.log('filtered',JSON.stringify(filteredgeojson));
 
-    console.log('orginial',JSON.stringify(originalData));
+    console.log('orginial',JSON.stringify(originalDataJson));
 
 
     // Filter the GeoJSON data based on the combined filter
     var filteredData = {
         type: "FeatureCollection",
-        crs: originalData.crs,
-        features: originalData.features.filter(item => {
+        crs: originalDataJson.crs,
+        features: originalDataJson.features.filter(item => {
             if (item.properties && item.properties.ETAT) {
                 return etatsFiltresCluster.includes(item.properties.ETAT);
             }
