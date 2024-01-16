@@ -205,6 +205,7 @@ map.on('click', function(e) {
     }
 
 });
+
 var originalData;
 
 map.on('data', function(e) {
@@ -214,7 +215,7 @@ map.on('data', function(e) {
   }
 });
 
-geo = require("geotoolbox@2")
+import geo from 'geotoolbox@2';
 
 // filtrer les concessions
 function updateFilters() {
