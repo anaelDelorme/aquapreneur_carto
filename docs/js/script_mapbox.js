@@ -208,7 +208,12 @@ map.on('click', function(e) {
 
 });
 
-
+map.on('data', function(e) {
+    if (e.sourceId === 'point_data' && e.isSourceLoaded) {
+      var originalData = map.getSource('point_data')._data;
+      return (originalData)
+    }
+  });
 // filtrer les concessions
 function updateFilters() {
     var filters = ['any'];
@@ -232,9 +237,6 @@ function updateFilters() {
     map.setFilter('concessions', filters);
 
     // pour les clusters
-    // Get the original GeoJSON data
-    var originalData = map.getSource('point_data').getData();
-
     // Filter GeoJSON data using Turf.js
     var filteredData = turf.filter(originalData, 'ETAT', filters);
 
