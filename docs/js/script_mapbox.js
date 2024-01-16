@@ -160,7 +160,7 @@ map.on('click', function(e) {
             feature.geometry.coordinates :
             e.lngLat;
         
-            function isValidDate(date) {
+        function isValidDate(date) {
                 return date instanceof Date && !isNaN(date);
             }    
         
@@ -178,13 +178,13 @@ map.on('click', function(e) {
 
         popup.setLngLat(coordinates)
             .setHTML('<h2> Concession n°' + feature.properties.NUM_CONCESSION + '</h2>' +
-                '<p>Arrêté n°' + feature.properties.NUM_ARRETE || '' + ' du ' + dateFormateeArrete + '</h3>' +
-                '<p>Etat : ' + feature.properties.ETAT  || ''+ '<br/>' +
-                '<p>Date d\'expiration : ' + dateFormateeExpiration  || ''+ '<br/>' +
-                '<p>Type de parcelle : ' + feature.properties['TYPE PARCELLE']  || ''+ '<br/>' +
-                '<p>Nature du terrain : ' + feature.properties.NATURE_TERRAIN  || ''+ '<br/>' +
-                '<p>Nature et famille d\'exploitation : ' + feature.properties.NATURE_EXPLOITATION  || ''+ ' -' + feature.properties.FAMILLE_EXPLOITATION  || ''+ '<br/>' +
-                '<p>Espèce : ' + feature.properties.ESPECE_PRINCIPALE || '' + '<br/>' +
+                '<p>Arrêté n°' + (feature.properties.NUM_ARRETE || '') + ' du ' + dateFormateeArrete + '</h3>' +
+                '<p>Etat : ' + (feature.properties.ETAT  || '')+ '<br/>' +
+                '<p>Date d\'expiration : ' + dateFormateeExpiration  + '<br/>' +
+                '<p>Type de parcelle : ' + (feature.properties['TYPE PARCELLE']  || '')+ '<br/>' +
+                '<p>Nature du terrain : ' + (feature.properties.NATURE_TERRAIN  || '')+ '<br/>' +
+                '<p>Nature et famille d\'exploitation : ' + (feature.properties.NATURE_EXPLOITATION  || '')+ ' -' + (feature.properties.FAMILLE_EXPLOITATION  || '')+ '<br/>' +
+                '<p>Espèce : ' + (feature.properties.ESPECE_PRINCIPALE || '') + '<br/>' +
                 '</p>')
             .addTo(map);
 
