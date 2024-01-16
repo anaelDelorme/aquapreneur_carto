@@ -246,10 +246,14 @@ function updateFilters() {
     console.log('etatsFiltresCluster:', etatsFiltresCluster);
     map.setFilter('concessions', filters);
         // Filtrer le GeoJSON en fonction de la propriété ETAT
-        const filteredData = originalData.features.filter(feature => {
-            const etat = feature.properties.ETAT;
-            return etatsFiltresCluster.includes(etat);
-          });
+        // Combine all checked state filters into a single filter expression
+    const combinedFilter = filters.join(' || ');
+
+    // Filter the GeoJSON data based on the combined filter
+    const filteredData = originalData.filter(feature => {
+        const etat = feature.properties.ETAT;
+        return eval(combinedFilter);
+    });
           
 
     console.log('filteredData:', filteredData); // Ajout de cette ligne pour afficher dans la console
