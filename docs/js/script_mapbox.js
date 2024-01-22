@@ -171,28 +171,41 @@ function setPopupHTML(feature) {
             function isValidDate(date) {
                 return date instanceof Date && !isNaN(date);
             }    
+            function formatDate(date){
+                var jour = date.getDate();
+                var mois = date.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
+                var annee = date.getFullYear();
+                return dateFormatee = isValidDate(date) ? jour + '/' + mois + '/' + anneeE : '';
+                
+            }
 
         var dateExpiration = new Date(feature.properties.DATE_EXPIRATION);
-        var jourExpiration = dateExpiration.getDate();
-        var moisExpiration = dateExpiration.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
-        var anneeExpiration = dateExpiration.getFullYear();
-        var dateFormateeExpiration = isValidDate(dateExpiration) ? jourExpiration + '/' + moisExpiration + '/' + anneeExpiration : '';
+        dateExpirationFormatee = formatDate(dateExpiration)
 
         var dateArrete = new Date(feature.properties['DATE_ARRETE ']);
-        var jourArrete = dateArrete.getDate();
-        var moisArrete = dateArrete.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
-        var anneeArrete = dateArrete.getFullYear();
-        var dateFormateeArrete = isValidDate(dateArrete) ? jourArrete + '/' + moisArrete + '/' + anneeArrete : '';
+        dateArreteFormatee = formatDate(dateArrete)
 
-    return '<h2> Concession n°' + feature.properties.NUM_CONCESSION + '</h2>' +
-        '<p>Arrêté n°' + (feature.properties.NUM_ARRETE || '') + ' du ' + dateFormateeArrete + '</h3>' +
-        '<p>Etat : ' + (feature.properties.ETAT || '') + '<br/>' +
-        '<p>Date d\'expiration : ' + dateFormateeExpiration + '<br/>' +
-        '<p>Type de parcelle : ' + (feature.properties['TYPE PARCELLE'] || '') + '<br/>' +
-        '<p>Nature du terrain : ' + (feature.properties.NATURE_TERRAIN || '') + '<br/>' +
-        '<p>Nature et famille d\'exploitation : ' + (feature.properties.NATURE_EXPLOITATION || '') + ' -' + (feature.properties.FAMILLE_EXPLOITATION || '') + '<br/>' +
-        '<p>Espèce : ' + (feature.properties.ESPECE_PRINCIPALE || '') + '<br/>' +
-        '</p>';
+        var dateDebutEP = new Date(feature.properties['Date début Enquête publique']);
+        dateDebutEPFormatee = formatDate(dateDebutEP)
+
+        var dateFinEP = new Date(feature.properties['Date fin Enquête Publique']);
+        dateFinEPFormatee = formatDate(dateFinEP)
+
+    return '<h2> N° parcelle : ' + feature.properties.NUM_CONCESSION + '</h2>' +
+            (dateDebutEPFormatee && dateFinEPFormatee ?
+                '<p><b><span style="color: green;">Enquête Publique : du ' + dateDebutEPFormatee + ' au ' + dateFinEPFormatee +'</span></b></p><br/>' :
+                '') +
+            'Espèce : '+(feature.properties.ESPECE_PRINCIPALE || '') + '<br/>' +
+            'Technique : '+ (feature.properties.NATURE_EXPLOITATION || '') + ' -' + (feature.properties.FAMILLE_EXPLOITATION || '') + '<br/>' +
+            (feature.properties.SURFACE_PARCELLE ? 'Surface : ' + feature.properties.SURFACE_PARCELLE + 'm2 (ares)<br/>' : '') +
+            (feature.properties.LONGUEUR_PARCELLE ? 'Longueur : ' + feature.properties.LONGUEUR_PARCELLE + 'm<br/>' : '') +
+            (feature.properties.Surface ? 'Surface : ' + feature.properties.Surface + 'm2 (ares)<br/>' : '') +
+            (feature.properties['Surface occupation (ares)'] ? 'Surface : ' + feature.properties['Surface occupation (ares)'] + 'm2 (ares)<br/>' : '')  +
+            (feature.properties['Longueur (m)'] ? 'Longueur : ' + feature.properties['Longueur (m)'] + 'm<br/>' : '')+ 
+             'Nature du terrain : '+(feature.properties.NATURE_TERRAIN || '')+'<br/>' +
+             (feature.properties['N° demande'] ? 'N° demande : ' + feature.properties['N° demande'] + ' - '+ feature.properties.Opérations + '<br/>' :'') +
+             (feature.properties.NUM_ARRETE ? 'N°arrêté AECM : ' + feature.properties.NUM_ARRETE + '<br/>' :'') +
+             (feature.properties.DATE_ARRETE ? 'Date de fin de validité de l\'arrêté : ' + feature.properties.DATE_ARRETE + '<br/>' :'') ;
 }
 
 
