@@ -175,7 +175,7 @@ function setPopupHTML(feature) {
                 var jour = date.getDate();
                 var mois = date.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
                 var annee = date.getFullYear();
-                return dateFormatee = isValidDate(date) ? jour + '/' + mois + '/' + anneeE : '';
+                return dateFormatee = isValidDate(date) ? jour + '/' + mois + '/' + annee : '';
                 
             }
 
