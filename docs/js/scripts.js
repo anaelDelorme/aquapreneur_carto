@@ -127,3 +127,23 @@ function fadeIn(el, display) {
 };
 
 
+
+
+$.getJSON('./data_dttm_atena_point_light.geojson', function(data) {
+    // Récupérer les NUM_CONCESSION du GeoJSON
+    var numConcessions = data.features.map(function(feature) {
+        return feature.properties.NUM_CONCESSION;
+    });
+
+    // Activer l'autocomplétion avec jQuery UI Autocomplete
+    $('#parcelleSearch').autocomplete({
+        source: numConcessions,
+        minLength: 1, // Nombre de caractères pour déclencher l'autocomplétion
+        select: function(event, ui) {
+            // Gérer la sélection de l'élément
+            console.log("Sélectionné : " + ui.item.value);
+        }
+    });
+});
+
+
