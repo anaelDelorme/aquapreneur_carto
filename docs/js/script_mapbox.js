@@ -192,7 +192,7 @@ function setPopupHTML(feature) {
         dateFinEPFormatee = formatDate(dateFinEP)
 
     return '<h2> N° parcelle : ' + feature.properties.NUM_CONCESSION + '</h2>' +
-            '<h4>Etat : '+(feature.properties.ETAT || '') + '</h4>' +
+            '<b>Etat : '+(feature.properties.ETAT || '') + '</b></br>' +
             (dateDebutEPFormatee && dateFinEPFormatee ?
                 '<p><b><span style="color: green;">Enquête Publique : du ' + dateDebutEPFormatee + ' au ' + dateFinEPFormatee +'</span></b></p>' :
                 '') +
