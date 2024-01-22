@@ -606,27 +606,3 @@ html {
 }
 
 
-#search-container {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-  /* Assurez-vous que la boîte de recherche est au-dessus des autres éléments */
-}
-
-.mapboxgl-ctrl-top-right {
-  position: absolute !important;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  float: none !important;
-  margin: 0 !important;
-  width: 600px !important;
-}
-
-.mapboxgl-ctrl-top-right .mapboxgl-ctrl {
-  float: none !important;
-  margin: 0 !important;
-  width: 600px !important;
-}
