@@ -16,7 +16,7 @@
     color: #cacafb;
     outline: 0;
     border-radius: 10rem;
-    border: .05rem solid #6a6af4;
+    border: .05rem solid #1D809F;
     background-image: url(images/search.svg);
     background-size: 1.4rem;
     background-position: left 1.05rem top .8rem;
@@ -34,7 +34,7 @@
 }
 
 .autoComplete_wrapper>input:hover::placeholder {
-    color: #6a6af4;
+    color: #1D809F;
     transition: all .3s ease;
     -webkit-transition: all -webkit-transform .3s ease
 }
@@ -60,7 +60,7 @@
 }
 
 .autoComplete_wrapper>input:focus {
-    color: #000091;
+    color: #1D809F;
     border: .06rem solid #cacafb
 }
 
@@ -108,7 +108,7 @@
 
 .autoComplete_wrapper>ul>li mark {
     background-color: transparent;
-    color: #6a6af4;
+    color: #1D809F;
     font-weight: 700
 }
 
@@ -126,3 +126,5 @@
         width: 18rem
     }
 }
+
+.autoComplete_wrapper>input:focus {
