@@ -8,21 +8,6 @@ center: [2.727990, 46.967532], // lat/long
 zoom: 5
 });
 
-const searchJS = document.getElementById('search-js');
-searchJS.onload = function () {
-    const searchBox = new MapboxSearchBox();
-    searchBox.accessToken = mapboxgl.accessToken;
-    searchBox.options = {
-        language: 'fr',
-        country: 'FR',
-        types: 'address,poi,region,place,locality',
-        proximity: [2.727990, 46.967532]
-    };
-    searchBox.placeholder = 'Rechercher une commune ou une adresse';
-    searchBox.marker = true;
-    searchBox.mapboxgl = mapboxgl;
-    map.addControl(searchBox);
-};
 
 function addAdditionalSourceAndLayer() {
     map.addSource('tileset_data',{
