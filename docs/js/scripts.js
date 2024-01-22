@@ -127,23 +127,36 @@ function fadeIn(el, display) {
 };
 
 
-
-
-$.getJSON('./data_dttm_atena_point_light.geojson', function(data) {
-    // Récupérer les NUM_CONCESSION du GeoJSON
-    var numConcessions = data.features.map(function(feature) {
-        return feature.properties.NUM_CONCESSION;
-    });
-
-    // Activer l'autocomplétion avec jQuery UI Autocomplete
-    $('#parcelleSearch').autocomplete({
-        source: numConcessions,
-        minLength: 1, // Nombre de caractères pour déclencher l'autocomplétion
-        select: function(event, ui) {
-            // Gérer la sélection de l'élément
-            console.log("Sélectionné : " + ui.item.value);
+const autoCompleteJS = new autoComplete({ selector: "#autoComplete",
+placeHolder: "Search for Food...",
+data: {
+    src: ["Sauce - Thousand Island", "Wild Boar - Tenderloin", "Goat - Whole Cut"],
+    cache: true,
+},
+resultsList: {
+    element: (list, data) => {
+        if (!data.results.length) {
+            // Create "No Results" message element
+            const message = document.createElement("div");
+            // Add class to the created element
+            message.setAttribute("class", "no_result");
+            // Add message text content
+            message.innerHTML = `<span>Found No Results for "${data.query}"</span>`;
+            // Append message element to the results list
+            list.prepend(message);
         }
-    });
-});
-
+    },
+    noResults: true,
+},
+resultItem: {
+    highlight: true
+},
+events: {
+    input: {
+        selection: (event) => {
+            const selection = event.detail.selection.value;
+            autoCompleteJS.input.value = selection;
+        }
+    }
+} });
 

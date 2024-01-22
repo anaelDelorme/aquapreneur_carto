@@ -19,9 +19,10 @@
         <link href="css/styles.css" rel="stylesheet" />
         <!-- Mapbox-->
         <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
-                <!-- Jquery-->
-                <script src="js/jquery-3.7.1.min.js"></script>
-    </head>
+                <!-- autocomplete-->
+                <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
+            </head>
     <body id="page-top">
         <!-- Navigation-->
         <!-- Bouton de pliage à droite -->
@@ -93,7 +94,7 @@
 <!-- Barre de recherche -->
 <div id="search-bar" class="d-flex justify-content-center align-items-center p-3">
     <i class="fas fa-search"></i>
-    <input type="text" id="parcelleSearch" class="form-control ms-2" placeholder="Saisir le numéro d'une parcelle">
+    <input id="autoComplete" type="search"  placeholder="Saisir le numéro d'une parcelle" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048" tabindex="1">
 </div>
 
 <!-- Affichage de la carte -->
