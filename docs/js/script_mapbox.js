@@ -253,6 +253,15 @@ fetch('./data_dttm_atena_point_light.geojson')
   .then(response => response.json())
   .then(data => {
     originalData = data;
+    // Gérer la saisie dans le champ de recherche
+    var parcelleSearchInput = document.getElementById('parcelleSearch');
+    parcelleSearchInput.addEventListener('input', function () {
+        var searchTerm = parcelleSearchInput.value.trim().toLowerCase();
+        var matchingFeatures = originalData.features.filter(feature => {
+            var numConcession = feature.properties.NUM_CONCESSION.toLowerCase();
+            return numConcession.includes(searchTerm);
+        });
+        console.log(matchingFeatures);})
   })
   .catch(error => console.error('Erreur lors de la récupération des données :', error));
 
