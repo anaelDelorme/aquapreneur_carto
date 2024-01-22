@@ -128,7 +128,7 @@ function fadeIn(el, display) {
 
 
 const autoCompleteJS = new autoComplete({ selector: "#autoComplete",
-placeHolder: "Search for Food...",
+placeHolder: "Saisir le numéro d'une parcelle...",
 data: {
     src: ["Sauce - Thousand Island", "Wild Boar - Tenderloin", "Goat - Whole Cut"],
     cache: true,
@@ -141,7 +141,7 @@ resultsList: {
             // Add class to the created element
             message.setAttribute("class", "no_result");
             // Add message text content
-            message.innerHTML = `<span>Found No Results for "${data.query}"</span>`;
+            message.innerHTML = `<span>Aucun résultat pour "${data.query}"</span>`;
             // Append message element to the results list
             list.prepend(message);
         }
