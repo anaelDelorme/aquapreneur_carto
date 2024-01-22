@@ -13,7 +13,7 @@
     -webkit-box-sizing: border-box;
     font-size: 1rem;
     text-overflow: ellipsis;
-    color: rgba(255, 122, 122, .3);
+    color: #cacafb;
     outline: 0;
     border-radius: 10rem;
     border: .05rem solid #6a6af4;
@@ -114,11 +114,11 @@
 
 .autoComplete_wrapper>ul>li:hover {
     cursor: pointer;
-    background-color: rgba(255, 122, 122, .15)
+    background-color: #cacafb
 }
 
 .autoComplete_wrapper>ul>li[aria-selected=true] {
-    background-color: rgba(255, 122, 122, .15)
+    background-color: #cacafb
 }
 
 @media only screen and (max-width:600px) {

@@ -127,36 +127,43 @@ function fadeIn(el, display) {
 };
 
 
-const autoCompleteJS = new autoComplete({ selector: "#autoComplete",
-placeHolder: "Saisir le numéro d'une parcelle...",
-data: {
-    src: ["Sauce - Thousand Island", "Wild Boar - Tenderloin", "Goat - Whole Cut"],
-    cache: true,
-},
-resultsList: {
-    element: (list, data) => {
-        if (!data.results.length) {
-            // Create "No Results" message element
-            const message = document.createElement("div");
-            // Add class to the created element
-            message.setAttribute("class", "no_result");
-            // Add message text content
-            message.innerHTML = `<span>Aucun résultat pour "${data.query}"</span>`;
-            // Append message element to the results list
-            list.prepend(message);
-        }
-    },
-    noResults: true,
-},
-resultItem: {
-    highlight: true
-},
-events: {
-    input: {
-        selection: (event) => {
-            const selection = event.detail.selection.value;
-            autoCompleteJS.input.value = selection;
-        }
-    }
-} });
 
+fetch('./data_dttm_atena_point_light.geojson')
+    .then(response => response.json())
+    .then(data => {
+        // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
+        const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
+
+        // Utiliser les parcelles comme source de données pour l'auto-complétion
+        const autoCompleteJS = new autoComplete({
+            selector: "#autoComplete",
+            placeHolder: "Saisir le numéro d'une parcelle...",
+            data: {
+                src: parcelles,
+                cache: true,
+            },
+            resultsList: {
+                element: (list, data) => {
+                    if (!data.results.length) {
+                        const message = document.createElement("div");
+                        message.setAttribute("class", "no_result");
+                        message.innerHTML = `<span>Aucun résultat pour "${data.query}"</span>`;
+                        list.prepend(message);
+                    }
+                },
+                noResults: true,
+            },
+            resultItem: {
+                highlight: true
+            },
+            events: {
+                input: {
+                    selection: (event) => {
+                        const selection = event.detail.selection.value;
+                        autoCompleteJS.input.value = selection;
+                    }
+                }
+            }
+        });
+    })
+    .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
