@@ -8,6 +8,22 @@ center: [2.727990, 46.967532], // lat/long
 zoom: 5
 });
 
+const searchJS = document.getElementById('search-js');
+searchJS.onload = function () {
+    const searchBox = new MapboxSearchBox();
+    searchBox.accessToken = mapboxgl.accessToken;
+    searchBox.options = {
+        language: 'fr',
+        country: 'FR',
+        types: 'address,poi,region,place,locality',
+        proximity: [2.727990, 46.967532]
+    };
+    searchBox.placeholder = 'Rechercher une commune ou une adresse';
+    searchBox.marker = true;
+    searchBox.mapboxgl = mapboxgl;
+    map.addControl(searchBox);
+};
+
 function addAdditionalSourceAndLayer() {
     map.addSource('tileset_data',{
         "type":'vector',
@@ -21,15 +37,19 @@ function addAdditionalSourceAndLayer() {
         "source-layer": 'data_dttm_atena_light-58sx1e',
         "paint":{"fill-color": [
             "match",
-            ["get", "ETAT"],
-            "Concédée", "#fc5d00",
-            "Supprimée", "#f60700",
-            "Annulée", "#dbdbdc",
-            "Vacante","#27a658",
-            "Etat inconnu","#7b7b7b",
+            ["get", "Disponibilité"],
+            "Indisponible", [
+                "match",
+                ["get", "ETAT"],
+                "Concédée", "#e4794a",
+                "Supprimée", "#929292",
+                "Annulée", "#929292",
+                "#7b7b7b" 
+            ],
+            "Disponible","#1f8d49",
+            "Etat inconnu","#fbb8f6",
             "#7b7b7b" /* Default color if no match is found */
         ],
-        
         
         "fill-opacity":0.8}
     });
@@ -118,7 +138,7 @@ viewToggleSwitch.addEventListener('change', function () {
 });
 // Ajout d'éléments de navigation
 var nav = new mapboxgl.NavigationControl();
-map.addControl(nav,'top-left');
+map.addControl(nav,'bottom-left');
 
 map.addControl(new mapboxgl.ScaleControl({
     maxWidth:120,
@@ -147,23 +167,11 @@ map.on('mousemove', function(e) {
     }
 });
 
-
-
-map.on('click', function(e) {
-    var concessionFeatures = map.queryRenderedFeatures(e.point, { layers: ['concessions'] });
-    var clusterFeatures = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
-
-    // Gestion des clics sur la couche 'concessions'
-    if (concessionFeatures.length) {
-        var feature = concessionFeatures[0];
-        var coordinates = feature.geometry.type === 'Point' ?
-            feature.geometry.coordinates :
-            e.lngLat;
-        
-        function isValidDate(date) {
+function setPopupHTML(feature) {
+            function isValidDate(date) {
                 return date instanceof Date && !isNaN(date);
             }    
-        
+
         var dateExpiration = new Date(feature.properties.DATE_EXPIRATION);
         var jourExpiration = dateExpiration.getDate();
         var moisExpiration = dateExpiration.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
@@ -176,16 +184,31 @@ map.on('click', function(e) {
         var anneeArrete = dateArrete.getFullYear();
         var dateFormateeArrete = isValidDate(dateArrete) ? jourArrete + '/' + moisArrete + '/' + anneeArrete : '';
 
+    return '<h2> Concession n°' + feature.properties.NUM_CONCESSION + '</h2>' +
+        '<p>Arrêté n°' + (feature.properties.NUM_ARRETE || '') + ' du ' + dateFormateeArrete + '</h3>' +
+        '<p>Etat : ' + (feature.properties.ETAT || '') + '<br/>' +
+        '<p>Date d\'expiration : ' + dateFormateeExpiration + '<br/>' +
+        '<p>Type de parcelle : ' + (feature.properties['TYPE PARCELLE'] || '') + '<br/>' +
+        '<p>Nature du terrain : ' + (feature.properties.NATURE_TERRAIN || '') + '<br/>' +
+        '<p>Nature et famille d\'exploitation : ' + (feature.properties.NATURE_EXPLOITATION || '') + ' -' + (feature.properties.FAMILLE_EXPLOITATION || '') + '<br/>' +
+        '<p>Espèce : ' + (feature.properties.ESPECE_PRINCIPALE || '') + '<br/>' +
+        '</p>';
+}
+
+
+map.on('click', function(e) {
+    var concessionFeatures = map.queryRenderedFeatures(e.point, { layers: ['concessions'] });
+    var clusterFeatures = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
+
+    // Gestion des clics sur la couche 'concessions'
+    if (concessionFeatures.length) {
+        var feature = concessionFeatures[0];
+        var coordinates = feature.geometry.type === 'Point' ?
+            feature.geometry.coordinates :
+            e.lngLat;        
+
         popup.setLngLat(coordinates)
-            .setHTML('<h2> Concession n°' + feature.properties.NUM_CONCESSION + '</h2>' +
-                '<p>Arrêté n°' + (feature.properties.NUM_ARRETE || '') + ' du ' + dateFormateeArrete + '</h3>' +
-                '<p>Etat : ' + (feature.properties.ETAT  || '')+ '<br/>' +
-                '<p>Date d\'expiration : ' + dateFormateeExpiration  + '<br/>' +
-                '<p>Type de parcelle : ' + (feature.properties['TYPE PARCELLE']  || '')+ '<br/>' +
-                '<p>Nature du terrain : ' + (feature.properties.NATURE_TERRAIN  || '')+ '<br/>' +
-                '<p>Nature et famille d\'exploitation : ' + (feature.properties.NATURE_EXPLOITATION  || '')+ ' -' + (feature.properties.FAMILLE_EXPLOITATION  || '')+ '<br/>' +
-                '<p>Espèce : ' + (feature.properties.ESPECE_PRINCIPALE || '') + '<br/>' +
-                '</p>')
+            .setHTML(setPopupHTML(feature))
             .addTo(map);
 
         return;
@@ -229,24 +252,17 @@ function updateFilters() {
         return;
       }
 
-    if (document.getElementById('supprimeeCheckbox').checked) {
-      filters.push(['==', ['get', 'ETAT'], 'Supprimée']);
-      etatsFiltresCluster.push('Supprimée');
+    if (document.getElementById('disponibleCheckbox').checked) {
+      filters.push(['==', ['get', 'Disponibilité'], 'Disponible']);
+      etatsFiltresCluster.push('Disponible');
     }
-    if (document.getElementById('annuleeCheckbox').checked) {
-      filters.push(['==', ['get', 'ETAT'], 'Annulée']);
-      etatsFiltresCluster.push('Annulée');
+    if (document.getElementById('indisponibleCheckbox').checked) {
+      filters.push(['==', ['get', 'Disponibilité'], 'Indisponible']);
+      etatsFiltresCluster.push('Indisponible');
     }
-    if (document.getElementById('vacanteCheckbox').checked) {
-      filters.push(['==', ['get', 'ETAT'], 'Vacante']);
-      etatsFiltresCluster.push('Vacante');
-    }
-    if (document.getElementById('concedeeCheckbox').checked) {
-      filters.push(['==', ['get', 'ETAT'], 'Concédée']);
-      etatsFiltresCluster.push('Concédée');
-    }
+    
     if (document.getElementById('indefinieCheckbox').checked) {
-      filters.push(['==', ['get', 'ETAT'], 'Etat inconnu']);
+      filters.push(['==', ['get', 'Disponibilité'], 'Etat inconnu']);
       etatsFiltresCluster.push('Etat inconnu');
     }
     map.setFilter('concessions', filters);
@@ -256,8 +272,8 @@ function updateFilters() {
         type: "FeatureCollection",
         crs: originalData.crs,
         features: originalData.features.filter(item => {
-            if (item.properties && item.properties.ETAT) {
-                return etatsFiltresCluster.includes(item.properties.ETAT);
+            if (item.properties && item.properties.Disponibilité) {
+                return etatsFiltresCluster.includes(item.properties.Disponibilité);
             }
             return false;
         })
@@ -268,17 +284,14 @@ function updateFilters() {
   }
 
   // Ajoutez un écouteur d'événement pour chaque case à cocher
-  document.getElementById('supprimeeCheckbox').addEventListener('change', updateFilters);
-  document.getElementById('annuleeCheckbox').addEventListener('change', updateFilters);
-  document.getElementById('vacanteCheckbox').addEventListener('change', updateFilters);
-  document.getElementById('concedeeCheckbox').addEventListener('change', updateFilters);
+  document.getElementById('disponibleCheckbox').addEventListener('change', updateFilters);
+  document.getElementById('indisponibleCheckbox').addEventListener('change', updateFilters);
   document.getElementById('indefinieCheckbox').addEventListener('change', updateFilters);
 
 
 //zoom sur les régions conchylicole
 document.getElementById('regionDropdown').addEventListener('change', function() {
     var selectedRegion = this.value;
-    
     var coordinates = getCoordinatesForRegion(selectedRegion);
     var zoom = getZoomForRegion(selectedRegion);
     map.flyTo({
@@ -291,21 +304,21 @@ document.getElementById('regionDropdown').addEventListener('change', function() 
 function getCoordinatesForRegion(region) {
     switch (region) {
         case 'Normandie':
-            return [-0.7236, 49.2473];
+            return [-1.1, 49.2];
         case 'Bnord':
-            return [-3.026, 48.802];
+            return [-3.5, 48.7];
         case 'Bsud':
-            return [-3.5046, 47.7016];
+            return [-4, 47.7];
         case 'Pdl':
-            return [-2.472, 46.975];
+            return [-3, 47];
         case 'Charente':
-            return [-1.2543, 46.0857];
+            return [-1.5, 45.89];
         case 'Arcachon':
-            return [-1.1884, 44.5649];
+            return [-1.3, 44.6];
         case 'Med':
-            return [5.841, 43.139];
+            return [5.5, 43.14];
         default:
-            return [2.727990, 46.967532]; 
+            return [3, 47]; 
     }
 }
 
@@ -321,7 +334,7 @@ function getZoomForRegion(region) {
         case 'Pdl':
             return 9;
         case 'Charente':
-            return 10;
+            return 9;
         case 'Arcachon':
             return 10;
         case 'Med':
@@ -335,3 +348,114 @@ function getZoomForRegion(region) {
 map.on('error', function(err) { 
     console.log('Mapbox Error:', err.error);
 });
+
+
+function setCentroid(feature){
+    var polygon = turf.polygon(feature.geometry.coordinates);
+    var centroid = turf.centroid(polygon);
+    return(centroid.geometry.coordinates)
+}
+
+
+// Liste des parcelles visibles
+let parcelles = [];
+
+const listingEl = document.getElementById('feature-listing');
+
+function renderListings(features) {
+    const empty = document.createElement('p');
+    // Clear any existing listings
+    listingEl.innerHTML = '';
+
+    const filteredFeatures = features.filter(feature => feature.properties.Disponibilité === "Disponible");
+
+
+    if (filteredFeatures.length) {
+    for (const feature of filteredFeatures) {
+        const itemLink = document.createElement('a');
+        const label = `${feature.properties.NUM_CONCESSION}`;
+        
+        itemLink.textContent = label;
+        
+        itemLink.addEventListener('mousemove', () => {
+                popup
+                .setLngLat(setCentroid(feature))
+                .setText(label)
+                .addTo(map);
+
+        });
+
+        itemLink.addEventListener('click', () => {
+            map.flyTo({
+                center: setCentroid(feature),
+                zoom: 15,
+                essential: true
+            });
+            popup.remove();
+            // Open the popup at the centroid coordinates
+            popup
+                .setLngLat(setCentroid(feature))
+                .setHTML(setPopupHTML(feature))
+                .addTo(map);
+        });
+        listingEl.appendChild(itemLink);
+    }
+    
+
+    } else if (filteredFeatures.length === 0 && map.getZoom() < 8) {
+    empty.textContent = 'Zoomer sur la carte pour afficher les parcelles disponibles.';
+    listingEl.appendChild(empty);
+    } else {
+    empty.textContent = 'Pas de parcelle disponible ici, changer de zone.';
+    listingEl.appendChild(empty);
+    
+    }
+}
+
+function calculatePolygonCenter(coordinates) {
+  // Votre logique pour calculer le centre du polygone
+  // Par exemple, vous pourriez calculer la moyenne des coordonnées du polygone
+  // Assurez-vous de manipuler les coordonnées selon la structure spécifique de vos données
+  // Ci-dessous, c'est un exemple simple pour des coordonnées [lng, lat]
+  const lngs = coordinates.map(coord => coord[0]);
+  const lats = coordinates.map(coord => coord[1]);
+
+  const centerLng = lngs.reduce((sum, lng) => sum + lng, 0) / lngs.length;
+  const centerLat = lats.reduce((sum, lat) => sum + lat, 0) / lats.length;
+
+  return [centerLng, centerLat];
+}
+
+function getUniqueFeatures(features, comparatorProperty) {
+    const uniqueIds = new Set();
+    const uniqueFeatures = [];
+    for (const feature of features) {
+        const id = feature.properties[comparatorProperty];
+        if (!uniqueIds.has(id)) {
+        uniqueIds.add(id);
+        uniqueFeatures.push(feature);
+        }
+    }
+    return uniqueFeatures;
+}
+ 
+function normalize(string) {
+return string.trim().toLowerCase();
+}
+
+map.on('moveend', () => {
+    const features = map.queryRenderedFeatures({ layers: ['concessions'] });
+    
+    if (features) {
+    const uniqueFeatures = getUniqueFeatures(features, 'NUM_CONCESSION');
+    // Populate features for the listing overlay.
+    renderListings(uniqueFeatures);
+    
+    
+    // Store the current features in sn `airports` variable to
+    // later use for filtering on `keyup`.
+    parcelles = uniqueFeatures;
+    }
+});
+
+
