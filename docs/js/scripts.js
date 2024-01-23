@@ -168,16 +168,23 @@ fetch('./data_dttm_atena_point_light.geojson')
                     selection: (event) => {
                         const selection = event.detail.selection.value;
                         const coordinates = concessionCoordinatesMap[selection];
-
+                        
                         if (coordinates) {
                             console.log("Sélection : " + selection);
                             console.log("Coordonnées : " + coordinates);
 
                             // Utiliser les coordonnées pour centrer la carte
                             map.flyTo({
-                                zoom: 10,
+                                zoom: 15,
                                 center: coordinates
                             });
+
+                            popup
+                                .setLngLat(coordinates)
+                                .setText(selection)
+                                .addTo(map);
+
+
                         } else {
                             console.error("Coordonnées non disponibles pour la sélection : " + selection);
                         }
