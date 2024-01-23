@@ -628,9 +628,8 @@ html {
   background-color: rgba(255, 255, 255, 0.8); /* Couleur de fond avec une opacité de 80% */
   position: fixed;
   bottom: 10px;
-  left: 80px;
-  right: 80px;
-  width: 100%;
+  left: 50%;
+  width: 200px;
   padding: 10px;
   text-align: center;
   font-size: 14px;

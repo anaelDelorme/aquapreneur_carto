@@ -127,82 +127,78 @@ function fadeIn(el, display) {
 };
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    let autoCompleteJS; // Déclarer la variable au niveau de la fenêtre
-
-    fetch('./data_dttm_atena_point_light.geojson')
-        .then(response => response.json())
-        .then(data => {
-            // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
-            const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
-
-            // Utiliser les parcelles comme source de données pour l'auto-complétion
-            autoCompleteJS = new autoComplete({
-                selector: "#autoComplete",
-                placeHolder: "Saisir le numéro d'une parcelle...",
-                data: {
-                    src: parcelles,
-                    cache: true,
-                },
-                resultsList: {
-                    element: (list, data) => {
-                        if (!data.results.length) {
-                            const message = document.createElement("div");
-                            message.setAttribute("class", "no_result");
-                            message.innerHTML = `<span>Aucun résultat pour "${data.query}"</span>`;
-                            list.prepend(message);
-                        }
-                    },
-                    noResults: true,
-                },
-                resultItem: {
-                    highlight: true
-                },
-                events: {
-                    input: {
-                        selection: (event) => {
-                            const selection = event.detail.selection.value;
-                            autoCompleteJS.input.value = selection;
-                        }
-                    }
-                }
-            });
-        })
-        .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
-     
-    console.log("AutocompleteJS : " + autoCompleteJS)
-    console.log("autoCompleteJS.input.value : " + autoCompleteJS.input.value)
-    // autoCompleteJS est maintenant accessible en dehors de la fonction de rappel
-    if (autoCompleteJS) {
-        autoCompleteJS.input.addEventListener("selection", function (event) {
-            console.log("EventListener : " + event)
-            const feedback = event.detail;
-            console.log("feedback : " + feedback)
-            autoCompleteJS.input.blur();
-            // Prepare User's Selected Value
-            const selection = feedback.selection.value[feedback.selection.key];
-            console.log("selection : " + selection)
-            // Zoom et affichage de la popup ici
-            zoomToParcelle(selection);
-        });
-    }
-
-    function zoomToParcelle(NUM_CONCESSION) {
-        const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
-        console.log("selectedFeature : " + selectedFeature)
-        if (selectedFeature) {
-            const coordinates = selectedFeature.geometry.coordinates;
-
-            map.flyTo({
-                center: coordinates,
-                zoom: 15,
-                essential: true
-            });
-
-            const popup = new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(setPopupHTML(selectedFeature))
-                .addTo(map);
+const autoCompleteJS = new autoComplete({
+    data: {
+      src: async () => {
+        try {
+          // Loading placeholder text
+          document
+            .getElementById("autoComplete")
+            .setAttribute("placeholder", "Loading...");
+          // Fetch External Data Source (replace with your GeoJSON file path)
+          const source = await fetch("./data_dttm_atena_point_light.geojson");
+          const data = await source.json();
+          // Post Loading placeholder text
+          document
+            .getElementById("autoComplete")
+            .setAttribute("placeholder", autoCompleteJS.placeHolder);
+          // Returns Fetched data
+          return data.features.map(feature => ({
+            match: feature.properties.NUM_CONCESSION, // Change this to the appropriate property in your GeoJSON
+            key: feature.properties.NUM_CONCESSION, // Change this to the appropriate property in your GeoJSON
+          }));
+        } catch (error) {
+          return error;
         }
+      },
+      cache: true,
+      filter: (list) => {
+        // Filter duplicates
+        // in case of multiple data keys usage
+        const filteredResults = Array.from(
+          new Set(list.map((value) => value.match))
+        ).map((NUM_CONCESSION,) => {
+          return list.find((value) => value.match === NUM_CONCESSION,);
+        });
+  
+        return filteredResults;
+      }
+    },
+    placeHolder: "Saisir le numéro d'une parcelle...",
+    resultsList: {
+      element: (list, data) => {
+        const info = document.createElement("p");
+        if (data.results.length > 0) {
+          info.innerHTML = `Affichage de <strong>${data.results.length}</strong> sur <strong>${data.matches.length}</strong> parcelles`;
+        } else {
+          info.innerHTML = `Trouvé <strong>${data.matches.length}</strong> résultats correspondants pour <strong>"${data.query}"</strong>`;
+        }
+        list.prepend(info);
+      },
+      noResults: true,
+      maxResults: 15,
+      tabSelect: true
+    },
+    resultItem: {
+      element: (item, data) => {
+        // Modify Results Item Style
+        item.style = "display: flex; justify-content: space-between;";
+        // Modify Results Item Content
+        item.innerHTML = `
+        <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+          ${data.match}
+        </span>
+        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase; color: rgba(0,0,0,.2);">
+          ${data.key}
+        </span>`;
+      },
+      highlight: true
+    },
+    events: {
+      input: {
+        focus: () => {
+          if (autoCompleteJS.input.value.length) autoCompleteJS.start();
+        }
+      }
     }
-});
+  });
