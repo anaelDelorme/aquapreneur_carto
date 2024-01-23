@@ -618,6 +618,7 @@ html {
   #filters,
   #feature-listing,
   #regionDropdown,
+  #disclaimer-bar
   #viewToggleSwitch {
     display: none !important;
   }
