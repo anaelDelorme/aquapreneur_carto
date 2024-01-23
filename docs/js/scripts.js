@@ -133,15 +133,16 @@ fetch('./data_dttm_atena_point_light.geojson')
     .then(data => {
         // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
         const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
-
+        console.log("Parcelles :"+ parcelles)
         function zoomToParcelle(NUM_CONCESSION) {
             // Trouver la feature correspondant à la parcelle sélectionnée
             const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
-        
+            console.log("selectedFeature :"+ selectedFeature)
+
             if (selectedFeature) {
                 // Récupérer les coordonnées de la feature
                 const coordinates = selectedFeature.geometry.coordinates;
-        
+                console.log("coordinates :"+ coordinates)
                 // Effectuer le zoom vers les coordonnées
                 map.flyTo({
                     center: coordinates,
