@@ -131,33 +131,7 @@ function fadeIn(el, display) {
 fetch('./data_dttm_atena_point_light.geojson')
     .then(response => response.json())
     .then(data => {
-        // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
-        const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
-        console.log("Parcelles :"+ parcelles)
-        function zoomToParcelle(NUM_CONCESSION) {
-            // Trouver la feature correspondant à la parcelle sélectionnée
-            const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
-            console.log("selectedFeature :"+ selectedFeature)
-
-            if (selectedFeature) {
-                // Récupérer les coordonnées de la feature
-                const coordinates = selectedFeature.geometry.coordinates;
-                console.log("coordinates :"+ coordinates)
-                // Effectuer le zoom vers les coordonnées
-                map.flyTo({
-                    center: coordinates,
-                    zoom: 15, // Ajustez le niveau de zoom selon vos besoins
-                    essential: true // Empêche l'animation brusque lors du zoom
-                });
-        
-                // Afficher la popup
-                const popup = new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML(setPopupHTML(selectedFeature))
-                    .addTo(map);
-            }
-        }
-        
+               
         // Utiliser les parcelles comme source de données pour l'auto-complétion
         const autoCompleteJS = new autoComplete({
             selector: "#autoComplete",
@@ -197,3 +171,31 @@ fetch('./data_dttm_atena_point_light.geojson')
     })
     .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
 
+    autoCompleteJS.input.addEventListener("selection", function (event) {
+        const feedback = event.detail;
+        autoCompleteJS.input.blur();
+        // Prepare User's Selected Value
+        const selection = feedback.selection.value[feedback.selection.key];
+    
+        // Zoom et affichage de la popup ici
+        zoomToParcelle(selection);
+    });
+    
+    function zoomToParcelle(NUM_CONCESSION) {
+        const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
+    
+        if (selectedFeature) {
+            const coordinates = selectedFeature.geometry.coordinates;
+    
+            map.flyTo({
+                center: coordinates,
+                zoom: 15,
+                essential: true
+            });
+    
+            const popup = new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(setPopupHTML(selectedFeature))
+                .addTo(map);
+        }
+    }
