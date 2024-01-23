@@ -137,9 +137,9 @@ const autoCompleteJS = new autoComplete({
             .setAttribute("placeholder", "Loading...");
           // Fetch External Data Source (replace with your GeoJSON file path)
           const source = await fetch("./data_dttm_atena_point_light.geojson");
-          console.log("Fetched Data:", source);
+          // console.log("Fetched Data:", source);
           const data = await source.json();
-          console.log("Fetched Data:", data);
+          // console.log("Fetched Data:", data);
           // Post Loading placeholder text
           document
             .getElementById("autoComplete")
@@ -150,24 +150,13 @@ const autoCompleteJS = new autoComplete({
             key: feature.properties.NUM_CONCESSION,
           }));
   
-          console.log("Result List:", resultList);
+          // console.log("Result List:", resultList);
           return resultList;
         } catch (error) {
           return error;
         }
       },
-      cache: true,
-      filter: (list) => {
-        // Filter duplicates
-        // in case of multiple data keys usage
-        const filteredResults = Array.from(
-          new Set(list.map((value) => value.match))
-        ).map((NUM_CONCESSION,) => {
-          return list.find((value) => value.match === NUM_CONCESSION,);
-        });
-  
-        return filteredResults;
-      }
+      cache: true
     },
     placeHolder: "Saisir le numéro d'une parcelle...",
     resultsList: {
@@ -207,3 +196,4 @@ const autoCompleteJS = new autoComplete({
       }
     }
   });
+
