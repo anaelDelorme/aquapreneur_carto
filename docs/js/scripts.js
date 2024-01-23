@@ -127,27 +127,48 @@ function fadeIn(el, display) {
 };
 
 
-// Load GeoJSON file
-const url = './data_dttm_atena_point_light.geojson';
-const geojson = await fetch(url).then(response => response.json());
 
-// Extract parcel properties
-const properties = geojson.features.map(feature => feature.properties);
 
-// Search function
-function search(query) {
-  // Filter parcels by NUM_CONCESSION
-  const filteredProperties = properties.filter(property => property.NUM_CONCESSION.toLowerCase().includes(query.toLowerCase()));
 
-  // Return parcel NUM_CONCESSION for autocompletion
-  return filteredProperties.map(property => property.NUM_CONCESSION);
-}
+fetch('./data_dttm_atena_point_light.geojson')
+    .then(response => response.json())
+    .then(data => {
+        // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
+        const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
+    })
+    .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
 
-// Initialize autocompletion
-$(document).ready(() => {
-  // Bind autocomplete functionality to input field
-  $('#autoComplete').autocomplete({
-    // Use the search function as the source
-    source: search
-  });
-});
+// Utiliser les parcelles comme source de données pour l'auto-complétion
+        const autoCompleteJS = new autoComplete({
+            selector: "#autoComplete",
+            placeHolder: "Saisir le numéro d'une parcelle...",
+            data: {
+                src: parcelles,
+                cache: true,
+            },
+            resultsList: {
+                element: (list, data) => {
+                    if (!data.results.length) {
+                        const message = document.createElement("div");
+                        message.setAttribute("class", "no_result");
+                        message.innerHTML = `<span>Aucun résultat pour "${data.query}"</span>`;
+                        list.prepend(message);
+                    }
+                },
+                noResults: true,
+            },
+            resultItem: {
+                highlight: true
+            },
+            events: {
+                input: {
+                    selection: (event) => {
+                        const selection = event.detail.selection.value;
+                        autoCompleteJS.input.value = selection;
+                        console.log("OKKKKKKKKKKK")
+                    }
+                }
+            }
+        });
+
+    
