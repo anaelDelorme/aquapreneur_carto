@@ -191,7 +191,7 @@ function setPopupHTML(feature) {
              'Nature du terrain : '+(feature.properties.NATURE_TERRAIN || '')+'<br/>' +
              (feature.properties['N° demande'] ? 'N° demande : ' + feature.properties['N° demande'] + ' - '+ feature.properties.Opérations + '<br/>' :'') +
              (feature.properties.NUM_ARRETE ? 'N°arrêté AECM : ' + feature.properties.NUM_ARRETE + '<br/>' :'') +
-             (feature.properties.DATE_ARRETE ? 'Date de fin de validité de l\'arrêté : ' + feature.properties.DATE_ARRETE + '<br/>' :'') ;
+             (dateArreteFormatee ? 'Date de fin de validité de l\'arrêté : ' + dateArreteFormatee + '<br/>' :'') ;
 }
 
 
