@@ -128,7 +128,7 @@ function fadeIn(el, display) {
 
 
 
-
+let parcelles; 
 
 fetch('./data_dttm_atena_point_light.geojson')
     .then(response => response.json())
