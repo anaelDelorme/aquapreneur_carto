@@ -127,21 +127,26 @@ function fadeIn(el, display) {
 };
 
 
-
-
-
 fetch('./data_dttm_atena_point_light.geojson')
     .then(response => response.json())
     .then(data => {
-        // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
-        const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
+        // Créer un objet pour stocker les correspondances entre NUM_CONCESSION et les coordonnées
+        const concessionCoordinatesMap = {};
 
-        // Utiliser les parcelles comme source de données pour l'auto-complétion
+        // Remplir l'objet avec les données du GeoJSON
+        data.features.forEach(feature => {
+            const numConcession = feature.properties.NUM_CONCESSION;
+            const coordinates = feature.geometry.coordinates;
+
+            concessionCoordinatesMap[numConcession] = coordinates;
+        });
+
+        // Utiliser les NUM_CONCESSION comme source de données pour l'auto-complétion
         const autoCompleteJS = new autoComplete({
             selector: "#autoComplete",
             placeHolder: "Saisir le numéro d'une parcelle...",
             data: {
-                src: parcelles,
+                src: Object.keys(concessionCoordinatesMap), // Utiliser les clés de l'objet comme source
                 cache: true,
             },
             resultsList: {
@@ -162,19 +167,23 @@ fetch('./data_dttm_atena_point_light.geojson')
                 input: {
                     selection: (event) => {
                         const selection = event.detail.selection.value;
-                        autoCompleteJS.input.value = selection;
-                        console.log("Sélection : " +selection);
-                        coordinates = [-1.1, 49.2];
-                        zoomTo = 10;
-                        map.flyTo({
-                            zoom: zoomTo,
-                            center: coordinates
-                        });
+                        const coordinates = concessionCoordinatesMap[selection];
+
+                        if (coordinates) {
+                            console.log("Sélection : " + selection);
+                            console.log("Coordonnées : " + coordinates);
+
+                            // Utiliser les coordonnées pour centrer la carte
+                            map.flyTo({
+                                zoom: 10,
+                                center: coordinates
+                            });
+                        } else {
+                            console.error("Coordonnées non disponibles pour la sélection : " + selection);
+                        }
                     }
                 }
             }
         });
     })
     .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
-
-    
