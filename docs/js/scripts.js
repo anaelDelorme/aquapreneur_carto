@@ -163,6 +163,7 @@ fetch('./data_dttm_atena_point_light.geojson')
                     selection: (event) => {
                         const selection = event.detail.selection.value;
                         autoCompleteJS.input.value = selection;
+                        console.log("Sélection : " +selection);
                         coordinates = [-1.1, 49.2];
                         zoomTo = 10;
                         map.flyTo({
