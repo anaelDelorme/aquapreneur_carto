@@ -128,63 +128,49 @@ function fadeIn(el, display) {
 
 
 const autoCompleteJS = new autoComplete({
-    data: {
-      src: async () => {
-        try {
-          // Loading placeholder text
-          document
-            .getElementById("autoComplete")
-            .setAttribute("placeholder", "Loading...");
-          // Fetch External Data Source (replace with your GeoJSON file path)
-          const source = await fetch("./data_dttm_atena_point_light.geojson");
-          // console.log("Fetched Data:", source);
-          const data = await source.json();
-          document
-              .getElementById("autoComplete")
-             .setAttribute("placeholder", autoCompleteJS.placeHolder);
-          return data;
-        } catch (error) {
-          return error;
-        }
-      },
-      cache: true
-    },
+    selector: "#autoComplete",
     placeHolder: "Saisir le numéro d'une parcelle...",
+    data: {
+        src: async () => {
+            try {
+              // Loading placeholder text
+              document
+                .getElementById("autoComplete")
+                .setAttribute("placeholder", "Loading...");
+              // Fetch External Data Source (replace with your GeoJSON file path)
+              const source = await fetch("./data_dttm_atena_point_light.geojson");
+              // console.log("Fetched Data:", source);
+              const data = await source.json();
+              document
+                  .getElementById("autoComplete")
+                 .setAttribute("placeholder", autoCompleteJS.placeHolder);
+              return data;
+            } catch (error) {
+              return error;
+            }
+          },
+        cache: true,
+    },
     resultsList: {
-      element: (list, data) => {
-        const info = document.createElement("p");
-        if (data.results.length > 0) {
-          info.innerHTML = `Affichage de <strong>${data.results.length}</strong> sur <strong>${data.matches.length}</strong> parcelles`;
-        } else {
-          info.innerHTML = `<strong>${data.matches.length}</strong> résultat correspondant pour <strong>"${data.query}"</strong>`;
-        }
-        list.prepend(info);
-      },
-      noResults: true,
-      maxResults: 15,
-      tabSelect: true
+        element: (list, data) => {
+            if (!data.results.length) {
+                const message = document.createElement("div");
+                message.setAttribute("class", "no_result");
+                message.innerHTML = `<span>Aucun résultat pour "${data.query}"</span>`;
+                list.prepend(message);
+            }
+        },
+        noResults: true,
     },
     resultItem: {
-      element: (item, data) => {
-        // Modify Results Item Style
-        item.style = "display: flex; justify-content: space-between;";
-        // Modify Results Item Content
-        item.innerHTML = `
-        <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-          ${data.match}
-        </span>
-        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase; color: rgba(0,0,0,.2);">
-          ${data.key}
-        </span>`;
-      },
-      highlight: true
+        highlight: true
     },
     events: {
-      input: {
-        focus: () => {
-          if (autoCompleteJS.input.value.length) autoCompleteJS.start();
+        input: {
+            selection: (event) => {
+                const selection = event.detail.selection.value;
+                autoCompleteJS.input.value = selection;
+            }
         }
-      }
     }
-  });
-
+});
