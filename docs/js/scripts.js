@@ -139,19 +139,10 @@ const autoCompleteJS = new autoComplete({
           const source = await fetch("./data_dttm_atena_point_light.geojson");
           // console.log("Fetched Data:", source);
           const data = await source.json();
-          // console.log("Fetched Data:", data);
-          // Post Loading placeholder text
           document
-            .getElementById("autoComplete")
-            .setAttribute("placeholder", autoCompleteJS.placeHolder);
-          // Returns Fetched data
-          const resultList = data.features.map(feature => ({
-            match: feature.properties.NUM_CONCESSION,
-            key: feature.properties.NUM_CONCESSION,
-          }));
-  
-          // console.log("Result List:", resultList);
-          return resultList;
+              .getElementById("autoComplete")
+             .setAttribute("placeholder", autoCompleteJS.placeHolder);
+          return data;
         } catch (error) {
           return error;
         }
