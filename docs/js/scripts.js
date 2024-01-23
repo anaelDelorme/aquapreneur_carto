@@ -149,17 +149,22 @@ fetch('./data_dttm_atena_point_light.geojson')
                 src: Object.keys(concessionCoordinatesMap), // Utiliser les clés de l'objet comme source
                 cache: true,
             },
+            
             resultsList: {
                 element: (list, data) => {
-                    if (!data.results.length) {
-                        const message = document.createElement("div");
-                        message.setAttribute("class", "no_result");
-                        message.innerHTML = `<span>Aucun résultat pour "${data.query}"</span>`;
-                        list.prepend(message);
-                    }
+                  const info = document.createElement("p");
+                  if (data.results.length > 0) {
+                    info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
+                  } else {
+                    info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
+                  }
+                  list.prepend(info);
                 },
                 noResults: true,
-            },
+                maxResults: 15,
+                tabSelect: true
+              },
+
             resultItem: {
                 highlight: true
             },
