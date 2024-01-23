@@ -606,3 +606,19 @@ html {
 }
 
 
+/* Gestion des smartphones */
+@media only screen and (max-width: 767px) {
+  /* Les styles à appliquer uniquement sur les écrans dont la largeur est inférieure à 767 pixels (smartphones) */
+  #sidebar-wrapper,
+  #sidebar-wrapper-left,
+  .menu-toggle,
+  .menu-toggle-left,
+  .sidebar-brand,
+  .sidebar-brand-left,
+  #filters,
+  #feature-listing,
+  #regionDropdown,
+  #viewToggleSwitch {
+    display: none !important;
+  }
+}
