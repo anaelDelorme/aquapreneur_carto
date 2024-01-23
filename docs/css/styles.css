@@ -629,8 +629,9 @@ html {
   position: fixed;
   bottom: 10px;
   left: 50%;
-  width: 600px;
-  border-radius: 2em;
+  transform: translateX(-50%);
+  width: 800px;
+  border-radius: 0.4em;
   padding: 10px;
   text-align: center;
   font-size: 14px;
