@@ -175,7 +175,7 @@ fetch('./data_dttm_atena_point_light.geojson')
 
                             // Utiliser les coordonnées pour centrer la carte
                             map.flyTo({
-                                zoom: 15,
+                                zoom: 16,
                                 center: coordinates
                             });
 
