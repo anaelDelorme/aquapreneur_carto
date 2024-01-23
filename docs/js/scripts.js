@@ -169,15 +169,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
         .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
-
+     
+    console.log("AutocompleteJS : " + autoCompleteJS)
+    console.log("autoCompleteJS.input.value : " + autoCompleteJS.input.value)
     // autoCompleteJS est maintenant accessible en dehors de la fonction de rappel
     if (autoCompleteJS) {
         autoCompleteJS.input.addEventListener("selection", function (event) {
+            console.log("EventListener : " + event)
             const feedback = event.detail;
+            console.log("feedback : " + feedback)
             autoCompleteJS.input.blur();
             // Prepare User's Selected Value
             const selection = feedback.selection.value[feedback.selection.key];
-
+            console.log("selection : " + selection)
             // Zoom et affichage de la popup ici
             zoomToParcelle(selection);
         });
@@ -185,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function zoomToParcelle(NUM_CONCESSION) {
         const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
-
+        console.log("selectedFeature : " + selectedFeature)
         if (selectedFeature) {
             const coordinates = selectedFeature.geometry.coordinates;
 
