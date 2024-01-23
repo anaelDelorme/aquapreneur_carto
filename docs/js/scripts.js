@@ -131,7 +131,9 @@ function fadeIn(el, display) {
 fetch('./data_dttm_atena_point_light.geojson')
     .then(response => response.json())
     .then(data => {
-               
+        // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
+        const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
+
         // Utiliser les parcelles comme source de données pour l'auto-complétion
         const autoCompleteJS = new autoComplete({
             selector: "#autoComplete",
@@ -152,12 +154,7 @@ fetch('./data_dttm_atena_point_light.geojson')
                 noResults: true,
             },
             resultItem: {
-                highlight: true,
-                onClick: (event, data) => {
-                    const selection = data.selection.value;
-                    autoCompleteJS.input.value = selection;
-                    zoomToParcelle(selection);
-                }
+                highlight: true
             },
             events: {
                 input: {
@@ -170,32 +167,3 @@ fetch('./data_dttm_atena_point_light.geojson')
         });
     })
     .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
-
-    autoCompleteJS.input.addEventListener("selection", function (event) {
-        const feedback = event.detail;
-        autoCompleteJS.input.blur();
-        // Prepare User's Selected Value
-        const selection = feedback.selection.value[feedback.selection.key];
-    
-        // Zoom et affichage de la popup ici
-        zoomToParcelle(selection);
-    });
-    
-    function zoomToParcelle(NUM_CONCESSION) {
-        const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
-    
-        if (selectedFeature) {
-            const coordinates = selectedFeature.geometry.coordinates;
-    
-            map.flyTo({
-                center: coordinates,
-                zoom: 15,
-                essential: true
-            });
-    
-            const popup = new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(setPopupHTML(selectedFeature))
-                .addTo(map);
-        }
-    }
