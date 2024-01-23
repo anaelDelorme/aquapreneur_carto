@@ -134,7 +134,7 @@ fetch('./data_dttm_atena_point_light.geojson')
     .then(response => response.json())
     .then(data => {
         // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
-        const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
+        parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
     })
     .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
 

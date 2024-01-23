@@ -618,9 +618,7 @@ html {
   #filters,
   #feature-listing,
   #regionDropdown,
-  .disclaimer-bar{
-    font-size: 10px !important;
-  },
+  .disclaimer-bar,
   #viewToggleSwitch {
     display: none !important;
   }
@@ -632,7 +630,7 @@ html {
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
+  width: 75%;
   border-radius: 0.4em;
   padding: 10px;
   text-align: center;
