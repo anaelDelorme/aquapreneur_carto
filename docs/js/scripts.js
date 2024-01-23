@@ -137,16 +137,21 @@ const autoCompleteJS = new autoComplete({
             .setAttribute("placeholder", "Loading...");
           // Fetch External Data Source (replace with your GeoJSON file path)
           const source = await fetch("./data_dttm_atena_point_light.geojson");
+          console.log("Fetched Data:", source);
           const data = await source.json();
+          console.log("Fetched Data:", data);
           // Post Loading placeholder text
           document
             .getElementById("autoComplete")
             .setAttribute("placeholder", autoCompleteJS.placeHolder);
           // Returns Fetched data
-          return data.features.map(feature => ({
-            match: feature.properties.NUM_CONCESSION, // Change this to the appropriate property in your GeoJSON
-            key: feature.properties.NUM_CONCESSION, // Change this to the appropriate property in your GeoJSON
+          const resultList = data.features.map(feature => ({
+            match: feature.properties.NUM_CONCESSION,
+            key: feature.properties.NUM_CONCESSION,
           }));
+  
+          console.log("Result List:", resultList);
+          return resultList;
         } catch (error) {
           return error;
         }
@@ -171,7 +176,7 @@ const autoCompleteJS = new autoComplete({
         if (data.results.length > 0) {
           info.innerHTML = `Affichage de <strong>${data.results.length}</strong> sur <strong>${data.matches.length}</strong> parcelles`;
         } else {
-          info.innerHTML = `Trouvé <strong>${data.matches.length}</strong> résultats correspondants pour <strong>"${data.query}"</strong>`;
+          info.innerHTML = `<strong>${data.matches.length}</strong> résultat correspondant pour <strong>"${data.query}"</strong>`;
         }
         list.prepend(info);
       },

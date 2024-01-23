@@ -629,7 +629,8 @@ html {
   position: fixed;
   bottom: 10px;
   left: 50%;
-  width: 200px;
+  width: 600px;
+  border-radius: 2em;
   padding: 10px;
   text-align: center;
   font-size: 14px;
