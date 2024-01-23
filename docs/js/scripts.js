@@ -128,23 +128,24 @@ function fadeIn(el, display) {
 
 
 
-
+var originalDataParcelle;
 
 fetch('./data_dttm_atena_point_light.geojson')
     .then(response => response.json())
     .then(data => {
-        // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
-        const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
+        originalDataParcelle = data;
+      
     })
-    .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
+    .catch(error => console.error('Erreur lors de la récupération des données :', error));
 
-console.log("Parcelles : "+parcelles)
+
+console.log("Parcelles : "+originalDataParcelle)
 // Utiliser les parcelles comme source de données pour l'auto-complétion
 const autoCompleteJS = new autoComplete({
     selector: "#autoComplete",
     placeHolder: "Saisir le numéro d'une parcelle...",
     data: {
-        src: parcelles,
+        src: originalDataParcelle,
         cache: true,
     },
     resultsList: {
