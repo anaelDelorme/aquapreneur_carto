@@ -167,3 +167,34 @@ fetch('./data_dttm_atena_point_light.geojson')
         });
     })
     .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
+
+
+    autoCompleteJS.input.addEventListener("selection", function (event) {
+        const feedback = event.detail;
+        autoCompleteJS.input.blur();
+        // Prepare User's Selected Value
+        const selection = feedback.selection.value[feedback.selection.key];
+    
+        // Zoom et affichage de la popup ici
+        zoomToParcelle(selection);
+    });
+    
+    function zoomToParcelle(NUM_CONCESSION) {
+        const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
+    
+        if (selectedFeature) {
+            const coordinates = selectedFeature.geometry.coordinates;
+    
+            map.flyTo({
+                center: coordinates,
+                zoom: 15,
+                essential: true
+            });
+    
+            const popup = new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(setPopupHTML(selectedFeature))
+                .addTo(map);
+        }
+    }
+    
