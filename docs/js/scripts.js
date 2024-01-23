@@ -134,6 +134,29 @@ fetch('./data_dttm_atena_point_light.geojson')
         // Extraire les informations nécessaires (NUM_CONCESSION dans cet exemple)
         const parcelles = data.features.map(feature => feature.properties.NUM_CONCESSION);
 
+        function zoomToParcelle(NUM_CONCESSION) {
+            // Trouver la feature correspondant à la parcelle sélectionnée
+            const selectedFeature = data.features.find(feature => feature.properties.NUM_CONCESSION === NUM_CONCESSION);
+        
+            if (selectedFeature) {
+                // Récupérer les coordonnées de la feature
+                const coordinates = selectedFeature.geometry.coordinates;
+        
+                // Effectuer le zoom vers les coordonnées
+                map.flyTo({
+                    center: coordinates,
+                    zoom: 15, // Ajustez le niveau de zoom selon vos besoins
+                    essential: true // Empêche l'animation brusque lors du zoom
+                });
+        
+                // Afficher la popup
+                const popup = new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(setPopupHTML(selectedFeature))
+                    .addTo(map);
+            }
+        }
+        
         // Utiliser les parcelles comme source de données pour l'auto-complétion
         const autoCompleteJS = new autoComplete({
             selector: "#autoComplete",
@@ -154,7 +177,12 @@ fetch('./data_dttm_atena_point_light.geojson')
                 noResults: true,
             },
             resultItem: {
-                highlight: true
+                highlight: true,
+                onClick: (event, data) => {
+                    const selection = data.selection.value;
+                    autoCompleteJS.input.value = selection;
+                    zoomToParcelle(selection);
+                }
             },
             events: {
                 input: {
@@ -167,3 +195,4 @@ fetch('./data_dttm_atena_point_light.geojson')
         });
     })
     .catch(error => console.error('Erreur lors du chargement du fichier GeoJSON:', error));
+

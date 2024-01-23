@@ -15,7 +15,7 @@
     text-overflow: ellipsis;
     color: rgba(29,128,159, .2);
     outline: 0;
-    border-radius: 10rem;
+    border-radius: 1rem;
     border: .05rem solid rgba(29,128,159);
     background-image: url(images/search.svg);
     background-size: 1.4rem;
@@ -127,4 +127,14 @@
     }
 }
 
-.autoComplete_wrapper>input:focus {
+.autoComplete_wrapper>ul[hidden]:not([style*="top"])::before {
+    content: "";
+    position: absolute;
+    top: -10px; /* Ajustez la position verticale selon vos besoins */
+    left: 50%;
+    margin-left: -5px; /* Ajustez la position horizontale selon vos besoins */
+    border-width: 0 5px 5px;
+    border-style: solid;
+    border-color: transparent transparent rgba(29, 128, 159, 0.4);
+    display: inline-block;
+}
