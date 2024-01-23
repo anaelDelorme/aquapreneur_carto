@@ -154,14 +154,14 @@ fetch('./data_dttm_atena_point_light.geojson')
                 element: (list, data) => {
                   const info = document.createElement("p");
                   if (data.results.length > 0) {
-                    info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
+                    info.innerHTML = `Affichage de <strong>${data.results.length}</strong> parcelles sur <strong>${data.matches.length}</strong> trouvées.`;
                   } else {
-                    info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
+                    info.innerHTML = `Il y a <strong>${data.matches.length}</strong> parcelle pour : <strong>"${data.query}"</strong>`;
                   }
                   list.prepend(info);
                 },
                 noResults: true,
-                maxResults: 15,
+                maxResults: 30,
                 tabSelect: true
               },
 
