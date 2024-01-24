@@ -119,6 +119,7 @@ viewToggleSwitch.addEventListener('change', function () {
     }
     map.on('style.load', function () {
         addAdditionalSourceAndLayer();
+        updateFilters();
     });
 });
 // Ajout d'éléments de navigation
