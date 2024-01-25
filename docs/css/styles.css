@@ -678,6 +678,8 @@ html {
   z-index: 1;
 }
 
-.color-square:hover + .popup-legend {
+.color-square:hover + .popup-legend,
+.orange:hover + .popup-legend,
+.grey:hover + .popup-legend {
   display: block; /* Affiche la popup lors du survol du carré */
 }
