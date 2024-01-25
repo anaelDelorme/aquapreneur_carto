@@ -639,3 +639,28 @@ html {
   z-index: 999; /* Placez-le au-dessus de la carte */
   box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère en dessous de la barre */
 }
+
+
+.color-square {
+  width: 8px; /* Ajustez la largeur du carré selon vos préférences */
+  height: 8px; /* Ajustez la hauteur du carré selon vos préférences */
+  display: inline-block;
+  margin-left: 5px; /* Ajustez la marge entre le texte et le carré selon vos préférences */
+  float: right; /* Positionne le carré à droite du texte */
+}
+
+.green {
+  background-color: #1f8d49; /* Couleur verte, ajustez selon vos préférences */
+}
+
+.grey {
+  background-color: #929292; /* Couleur verte, ajustez selon vos préférences */
+}
+
+.rose {
+  background-color: #fbb8f6; /* Couleur verte, ajustez selon vos préférences */
+}
+
+.orange {
+  background-color: #e4794a; /* Couleur verte, ajustez selon vos préférences */
+}
