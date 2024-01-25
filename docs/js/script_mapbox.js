@@ -104,7 +104,10 @@ map.addSource('point_data', {
 map.on('load', function(){
 
     addAdditionalSourceAndLayer();
-
+    gtag('event', 'map_load', {
+        'event_category': 'Map',
+        'event_label': 'Map Loaded'
+    });
 });
 
 const viewToggleSwitch = document.getElementById('viewToggleSwitch');
@@ -120,6 +123,10 @@ viewToggleSwitch.addEventListener('change', function () {
     map.on('style.load', function () {
         addAdditionalSourceAndLayer();
         updateFilters();
+    });
+    gtag('event', 'change_map_background', {
+        'event_category': 'Map',
+        'event_label': 'Changement du fond de carte'
     });
 });
 // Ajout d'éléments de navigation
@@ -210,7 +217,10 @@ map.on('click', function(e) {
         popup.setLngLat(coordinates)
             .setHTML(setPopupHTML(feature))
             .addTo(map);
-
+        gtag('event', 'clic_concessions', {
+                'event_category': 'Map',
+                'event_label': 'Clic sur une concession'
+            });
         return;
     }
 
@@ -228,6 +238,10 @@ map.on('click', function(e) {
                 });
             }
         );
+        gtag('event', 'clic_clusters', {
+            'event_category': 'Map',
+            'event_label': 'Clic sur un cluster de point pour zoomer'
+        });
         return;
     }
 
@@ -282,6 +296,11 @@ function updateFilters() {
 
     // Update the clustering source with the filtered data
     map.getSource('point_data').setData(filteredData);
+
+    gtag('event', 'choose_filter', {
+        'event_category': 'Map',
+        'event_label': 'Filtre sur la disponibilité d\'une parcelle'
+    });
   }
 
   // Ajoutez un écouteur d'événement pour chaque case à cocher
@@ -298,6 +317,10 @@ document.getElementById('regionDropdown').addEventListener('change', function() 
     map.flyTo({
         zoom: zoom,
         center: coordinates
+    });
+    gtag('event', 'zoom_region', {
+        'event_category': 'Map',
+        'event_label': 'Zoom sur une région conchylicole'
     });
 });
 
@@ -398,6 +421,11 @@ function renderListings(features) {
                 .setLngLat(setCentroid(feature))
                 .setHTML(setPopupHTML(feature))
                 .addTo(map);
+
+                gtag('event', 'choose_parcelle_dispo_and_zoom', {
+                    'event_category': 'Map',
+                    'event_label': 'Choix d\'une parcelle disponible dans le panel de gauche'
+                });
         });
         listingEl.appendChild(itemLink);
     }

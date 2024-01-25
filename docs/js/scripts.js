@@ -189,6 +189,10 @@ fetch('./data_dttm_atena_point_light.geojson')
                                 .setText(selection)
                                 .addTo(map);
 
+                            gtag('event', 'search_parcelle', {
+                                    'event_category': 'Map',
+                                    'event_label': 'Recherche et choix d\'une parcelle dans la barre de recherche'
+                                });
 
                         } else {
                             console.error("Coordonnées non disponibles pour la sélection : " + selection);
