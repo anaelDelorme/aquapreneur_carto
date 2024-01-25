@@ -665,3 +665,18 @@ html {
 .orange {
   background-color: #e4794a;
 }
+
+
+.popup-legend {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px; /* Bords arrondis */
+  padding: 10px;
+  z-index: 1;
+}
+
+.color-square:hover + .popup-legend {
+  display: block; /* Affiche la popup lors du survol du carré */
+}
