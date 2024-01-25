@@ -672,6 +672,7 @@ html {
   position: absolute;
   background-color: #fff;
   border: 1px solid #ccc;
+  color: #000;
   border-radius: 5px; /* Bords arrondis */
   padding: 10px;
   z-index: 1;
