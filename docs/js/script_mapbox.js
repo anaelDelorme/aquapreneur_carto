@@ -36,7 +36,7 @@ function addAdditionalSourceAndLayer() {
             "#7b7b7b" /* Default color if no match is found */
         ],
         
-        "fill-opacity":0.7}
+        "fill-opacity":0.6}
     });
 
     // affichage des clusters de points
