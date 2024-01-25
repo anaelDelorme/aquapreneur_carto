@@ -642,25 +642,26 @@ html {
 
 
 .color-square {
-  width: 8px; /* Ajustez la largeur du carré selon vos préférences */
-  height: 8px; /* Ajustez la hauteur du carré selon vos préférences */
+  width: 12px; 
+  height: 12px; 
   display: inline-block;
-  margin-left: 5px; /* Ajustez la marge entre le texte et le carré selon vos préférences */
-  float: right; /* Positionne le carré à droite du texte */
+  margin-left: 5px; 
+  border: 1px solid #fff; 
+  vertical-align: middle;
 }
 
 .green {
-  background-color: #1f8d49; /* Couleur verte, ajustez selon vos préférences */
+  background-color: #1f8d49; 
 }
 
 .grey {
-  background-color: #929292; /* Couleur verte, ajustez selon vos préférences */
+  background-color: #929292; 
 }
 
 .rose {
-  background-color: #fbb8f6; /* Couleur verte, ajustez selon vos préférences */
+  background-color: #fbb8f6; 
 }
 
 .orange {
-  background-color: #e4794a; /* Couleur verte, ajustez selon vos préférences */
+  background-color: #e4794a;
 }

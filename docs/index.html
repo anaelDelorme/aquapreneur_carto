@@ -47,15 +47,35 @@
             <h3 class="sidebar-heading">Filtre selon l'état des concessions</h3>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="disponibleCheckbox" checked />
-                <label class="form-check-label" for="disponibleCheckbox">Disponible<span class="color-square green"></span></label>
+                <label class="form-check-label" for="disponibleCheckbox">Disponible<span class="color-square green"></span>
+                    <div class="popup-legend">
+                        <b> Parcelles disponibles</b>
+                        <ul>
+                            <li>Parcelles dont l'état est : "Vacante"</li>
+                            <li>Parcelles qui a une enquête publique en cours, quel que soit son état.</li>
+                        </ul>
+                    </div>
+                </label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="indisponibleCheckbox" checked />
-                <label class="form-check-label" for="indisponibleCheckbox">Indisponible<span class="color-square orange"><span class="color-square grey"></span></span></label>
+                <label class="form-check-label" for="indisponibleCheckbox">Indisponible<span class="color-square orange"></span><span class="color-square grey"></span>
+                    <div class="popup-legend">
+                        <b> Parcelles indisponibles</b>
+                        <ul>
+                            <li>Parcelles dont l'état est "concédée" (oranges)</li>
+                            <li>Parcelles dont l'état est "supprimée" ou "annulée" (grises)</li>
+                        </ul>
+                    </div></label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="indefinieCheckbox" checked />
-                <label class="form-check-label" for="indefinieCheckbox">Etat inconnu<span class="color-square rose"></span></label>
+                <label class="form-check-label" for="indefinieCheckbox">Etat inconnu<span class="color-square rose"></span>
+                    <b> Parcelles dont l'état est inconnu</b>
+                    <ul>
+                        <li>Les informations sur l'état de la parcelle sont inconnues dans Atena, l'outil de gestion des concessions.</li>
+                    </ul>
+                </label>
             </div>
          </div>
 
