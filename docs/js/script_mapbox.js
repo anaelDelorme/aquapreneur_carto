@@ -110,16 +110,25 @@ map.on('load', function(){
     });
 });
 
-const viewToggleSwitch = document.getElementById('viewToggleSwitch');
+const selectStyle = document.getElementById('styleDropdown');
 
-viewToggleSwitch.addEventListener('change', function () {
-    if (this.checked) {
-        // Si la case à cocher est cochée, utilisez le style satellite
+selectStyle.addEventListener('change', function() {
+    var selectedValue = selectElement.value;
+
+    if (selectedValue === 'Satellite-street') {
         map.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
-    } else {
-        // Sinon, utilisez le style des rues
+    } else if (selectedValue === 'Satellite') {
+        map.setStyle('mapbox://styles/mapbox/satellite-v9');
+    } else if (selectedValue === 'Street') {
         map.setStyle('mapbox://styles/mapbox/streets-v12');
+    } else if (selectedValue === 'Light') {
+        map.setStyle('mapbox://styles/mapbox/light-v11');
+    } else if (selectedValue === 'Dark') {
+        map.setStyle('mapbox://styles/mapbox/dark-v11');
+    } else {
+        map.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
     }
+
     map.on('style.load', function () {
         addAdditionalSourceAndLayer();
         updateFilters();
