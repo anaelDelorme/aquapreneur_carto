@@ -3,7 +3,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5hZWxkZWxvcm1lIiwiYSI6ImNscTI1eHI1bjAwcHQya
 
 // Configuration de la carte
 var map = new mapboxgl.Map({container: 'map',
-style: 'mapbox://styles/mapbox/satellite-streets-v12', // fond de carte
+style: 'mapbox://styles/mapbox/satellite-v9', // fond de carte
 center: [2.727990, 46.967532], // lat/long
 zoom: 5
 });
@@ -126,7 +126,7 @@ selectStyle.addEventListener('change', function() {
     } else if (selectedValue === 'Dark') {
         map.setStyle('mapbox://styles/mapbox/dark-v11');
     } else {
-        map.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
+        map.setStyle('mapbox://styles/mapbox/satellite-v9');
     }
 
     map.on('style.load', function () {
