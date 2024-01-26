@@ -3,7 +3,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5hZWxkZWxvcm1lIiwiYSI6ImNscTI1eHI1bjAwcHQya
 
 // Configuration de la carte
 var map = new mapboxgl.Map({container: 'map',
-style: 'mapbox://styles/mapbox/satellite-v9', // fond de carte
+style: 'mapbox://styles/mapbox/satellite-streets-v12', // fond de carte
 center: [2.727990, 46.967532], // lat/long
 zoom: 5
 });
@@ -115,10 +115,10 @@ const viewToggleSwitch = document.getElementById('viewToggleSwitch');
 viewToggleSwitch.addEventListener('change', function () {
     if (this.checked) {
         // Si la case à cocher est cochée, utilisez le style satellite
-        map.setStyle('mapbox://styles/mapbox/satellite-v9');
+        map.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
     } else {
         // Sinon, utilisez le style des rues
-        map.setStyle('mapbox://styles/mapbox/light-v11');
+        map.setStyle('mapbox://styles/mapbox/streets-v12');
     }
     map.on('style.load', function () {
         addAdditionalSourceAndLayer();
