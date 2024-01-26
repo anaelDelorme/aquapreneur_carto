@@ -113,7 +113,7 @@ map.on('load', function(){
 const selectStyle = document.getElementById('styleDropdown');
 
 selectStyle.addEventListener('change', function() {
-    var selectedValue = selectElement.value;
+    var selectedValue = selectStyle.value;
 
     if (selectedValue === 'Satellite-street') {
         map.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
