@@ -191,11 +191,11 @@ function setPopupHTML(feature) {
                 '') +
             'Espèce : '+(feature.properties.ESPECE_PRINCIPALE || '') + '<br/>' +
             'Technique : '+ (feature.properties.NATURE_EXPLOITATION || '') + ' -' + (feature.properties.FAMILLE_EXPLOITATION || '') + '<br/>' +
-            (feature.properties.SURFACE_PARCELLE ? 'Surface : ' + feature.properties.SURFACE_PARCELLE + 'm2 (ares)<br/>' : '') +
-            (feature.properties.LONGUEUR_PARCELLE ? 'Longueur : ' + feature.properties.LONGUEUR_PARCELLE + 'm<br/>' : '') +
-            (feature.properties.Surface ? 'Surface : ' + feature.properties.Surface + 'm2 (ares)<br/>' : '') +
-            (feature.properties['Surface occupation (ares)'] ? 'Surface : ' + feature.properties['Surface occupation (ares)'] + 'm2 (ares)<br/>' : '')  +
-            (feature.properties['Longueur (m)'] ? 'Longueur : ' + feature.properties['Longueur (m)'] + 'm<br/>' : '')+ 
+            (feature.properties.SURFACE_PARCELLE ? 'Surface : ' + feature.properties.SURFACE_PARCELLE + ' m2 ('+ feature.properties.SURFACE_PARCELLE/100 +' ares)<br/>' : '') +
+            (feature.properties.LONGUEUR_PARCELLE ? 'Longueur : ' + feature.properties.LONGUEUR_PARCELLE + ' m<br/>' : '') +
+            (feature.properties.Surface ? 'Surface : ' + feature.properties.Surface + ' m2 ('+ feature.properties.Surface/100 +' ares)<br/>' : '') +
+            (feature.properties['Surface occupation (ares)'] ? 'Surface : ' + 100 * feature.properties['Surface occupation (ares)'] + ' m2 ('+ feature.properties['Surface occupation (ares)']+' ares)<br/>' : '')  +
+            (feature.properties['Longueur (m)'] ? 'Longueur : ' + feature.properties['Longueur (m)'] + ' m<br/>' : '')+ 
              'Nature du terrain : '+(feature.properties.NATURE_TERRAIN || '')+'<br/>' +
              (feature.properties['N° demande'] ? 'N° demande : ' + feature.properties['N° demande'] + ' - '+ feature.properties.Opérations + '<br/>' :'') +
              (feature.properties.NUM_ARRETE ? 'N°arrêté AECM : ' + feature.properties.NUM_ARRETE + '<br/>' :'') +
